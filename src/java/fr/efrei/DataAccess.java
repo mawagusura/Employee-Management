@@ -28,16 +28,21 @@ public class DataAccess {
     
     public DataAccess(String url, String user,String password){
         try{
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
             this.connection = DriverManager.getConnection(url,user,password);
         }
-        catch(SQLException ex){
+        catch(SQLException | ClassNotFoundException ex){
              Logger.getLogger(DataAccess.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            Logger.getLogger(DataAccess.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            Logger.getLogger(DataAccess.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
     
     public List<Employes> getEmployes(String sql) {
-        List<Employes> listEmployes=new ArrayList<Employes>();
+        List<Employes> listEmployes=new ArrayList<>();
         try{
             Statement stm = connection.createStatement();
             ResultSet rs=stm.executeQuery(sql);
@@ -64,7 +69,7 @@ public class DataAccess {
             while(rs.next()){
                 id= new Identifiant();
                 id.setLogin(rs.getString("LOGIN"));
-                id.setPwd(rs.getString("MDP"));
+                id.setPwd(rs.getString("PASSWORD"));
             }
             
             rs.close();
