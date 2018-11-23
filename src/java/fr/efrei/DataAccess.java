@@ -36,8 +36,21 @@ public class DataAccess {
     }
     
     
-    public Object getEmployes(String property) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public List<Employes> getEmployes(String sql) {
+        List<Employes> listEmployes=new ArrayList<Employes>();
+        try{
+            Statement stm = connection.createStatement();
+            ResultSet rs=stm.executeQuery(sql);
+            Employes employes;
+            while(rs.next()){
+                employes=new Employes();
+            }            
+            rs.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(DataAccess.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return listEmployes;
     }
 
     public Identifiant getIdentifiant(String sql,String login, String pwd) {        
