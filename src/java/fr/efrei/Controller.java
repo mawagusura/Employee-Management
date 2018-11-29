@@ -31,8 +31,11 @@ public class Controller extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        switch(request.getParameter("action")){
+        String action="";
+        if(request.getAttribute("action")!=null){
+            action=(String)request.getAttribute("action");
+        }
+        switch(action){
             case "login":
                 this.login(request,response);
                 break;
@@ -90,14 +93,19 @@ public class Controller extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
+    private Properties initProperty(HttpServletRequest request) throws IOException{
+        Properties prop= new Properties();
+        InputStream input= request.getServletContext().getResourceAsStream("/WEB-INF/db.properties");
+        prop.load(input);
+        return prop;
+    }
+    
     private void login(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session=request.getSession(true);
         
         String login=request.getParameter("chLogin");
         String password=request.getParameter("chPassword");
-        Properties prop= new Properties();
-        InputStream input= request.getServletContext().getResourceAsStream("/WEB-INF/db.properties");
-        prop.load(input);
+        Properties prop= this.initProperty(request);
             
         DataAccess dataAccess=new DataAccess(prop.getProperty("dbUrl"),prop.getProperty("dbUser"),prop.getProperty("dbPassword"));
         
@@ -115,8 +123,15 @@ public class Controller extends HttpServlet {
         dataAccess.closeConnection();
     }
 
-    private void delete(HttpServletRequest request, HttpServletResponse response) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    private void delete(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        Properties prop= this.initProperty(request);
+        HttpSession session=request.getSession(true);
+        
+        DataAccess dataAccess=new DataAccess(prop.getProperty("dbUrl"),prop.getProperty("dbUser"),prop.getProperty("dbPassword"));
+        session.setAttribute("sql-status",dataAccess.delete(prop.getProperty(""),request.getParameter("employes-id")));
+        this.getServletContext().getRequestDispatcher("/WEB-INF/index.jsp").forward(request, response);
+        dataAccess.closeConnection();
+        
     }
     
     private void add(HttpServletRequest request, HttpServletResponse response) {
