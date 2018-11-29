@@ -1,0 +1,6 @@
+fr\efrei\Controllers\DefautController.class
+fr\efrei\Controllers\ListController.class
+fr\efrei\Controllers\LoginController.class
+fr\efrei\DataAccess.class
+fr\efrei\entities\Employes.class
+fr\efrei\entities\Identifiant.class
