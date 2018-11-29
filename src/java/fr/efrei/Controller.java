@@ -33,8 +33,8 @@ public class Controller extends HttpServlet {
             throws ServletException, IOException {
 
         String action="";
-        if(request.getAttribute("action")!=null){
-            action=(String)request.getAttribute("action");
+        if(request.getParameter("action")!=null){
+            action=(String)request.getParameter("action");
         }
         
         switch(action){
@@ -129,7 +129,7 @@ public class Controller extends HttpServlet {
         HttpSession session=request.getSession(true);
         
         DataAccess dataAccess=new DataAccess(prop.getProperty("dbUrl"),prop.getProperty("dbUser"),prop.getProperty("dbPassword"));
-        session.setAttribute("sql-status",dataAccess.delete(prop.getProperty(""),request.getParameter("employes-id")));
+        session.setAttribute("sql-status",dataAccess.delete(prop.getProperty("SQL_DELETE_EMPLOYEES"),request.getParameter("employes-id")));
         this.getServletContext().getRequestDispatcher("/WEB-INF/index.jsp").forward(request, response);
         dataAccess.closeConnection();
         
