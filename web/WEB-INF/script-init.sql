@@ -35,5 +35,5 @@ INSERT INTO EMPLOYES(NOM,PRENOM,TELDOM,TELPORT,TELPRO,ADRESSE,CODEPOSTAL,VILLE,E
 ('Pascal','Blaise','0187384987','0622494256','0674178654','39 bvd de Port-Royal','21000','Dijon','bpascal@efrei.fr'),
 ('Euler','Leonhard','0122456678','0699854673','0623445166','140 avenue Complexe','90000','Nanterre','leuler@efrei.fr');
 
-CREATE USER 'jee'@'localhost' IDENTIFIED BY 'jee';
-GRANT ALL PRIVILEGES ON projet.* to 'jee'@'localhost'
+CREATE USER 'adm'@'localhost' IDENTIFIED BY 'adm';
+GRANT ALL PRIVILEGES ON projet.* to 'adm'@'localhost'
