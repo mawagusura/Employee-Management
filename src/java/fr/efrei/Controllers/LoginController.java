@@ -3,11 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package fr.efrei;
+package fr.efrei.Controllers;
 
+import fr.efrei.DataAccess;
+import fr.efrei.Identifiant;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -18,7 +22,7 @@ import javax.servlet.http.HttpSession;
  *
  * @author LUCASMasson
  */
-public class Controller extends HttpServlet {
+public class LoginController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -36,29 +40,25 @@ public class Controller extends HttpServlet {
         String login=request.getParameter("chLogin");
         String password=request.getParameter("chPassword");
         
-        if(login==null || password==null){
-            this.getServletContext().getRequestDispatcher("/WEB-INF/index.jsp").forward(request, response);
+        Properties prop= new Properties();
+        InputStream input= request.getServletContext().getResourceAsStream("/WEB-INF/db.properties");
+        prop.load(input);
+
+        DataAccess dataAccess=new DataAccess(prop.getProperty("dbUrl"),prop.getProperty("dbUser"),prop.getProperty("dbPassword"));
+        Identifiant id = dataAccess.getIdentifiant(prop.getProperty("SQL_LOGIN_PREPARED"),login,password);
+
+        if(id!=null){
+            session.setAttribute("identifiant", id);
+            ServletContext context= getServletContext();
+            RequestDispatcher rd= context.getRequestDispatcher("/list");
+            rd.forward(request, response);
         }
         else{
-            Properties prop= new Properties();
-            InputStream input= request.getServletContext().getResourceAsStream("/WEB-INF/db.properties");
-            prop.load(input);
-            
-            DataAccess dataAccess=new DataAccess(prop.getProperty("dbUrl"),prop.getProperty("dbUser"),prop.getProperty("dbPassword"));
-            
-            Identifiant id = dataAccess.getIdentifiant(prop.getProperty("SQL_LOGIN_PREPARED"),login,password);
-            
-            if(id!=null){
-                session.setAttribute("identifiant", id);
-                session.setAttribute("employes", dataAccess.getEmployes(prop.getProperty("SQL_ALL_EMPLOYEES")));
-                this.getServletContext().getRequestDispatcher("/WEB-INF/bienvenue.jsp").forward(request, response);
-            }
-            else{
-                session.setAttribute("message_erreur", "Identifiant ou mot de passe incorrect");
-                this.getServletContext().getRequestDispatcher("/WEB-INF/index.jsp").forward(request, response);
-            }
-            dataAccess.closeConnection();
+            session.setAttribute("message_erreur", "Identifiant ou mot de passe incorrect");
+            this.getServletContext().getRequestDispatcher("/WEB-INF/index.jsp").forward(request, response);
         }
+        dataAccess.closeConnection();
+        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

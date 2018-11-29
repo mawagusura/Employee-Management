@@ -21,7 +21,7 @@
             <br><br>
         </c:if> 
         
-        <form action="Controller">
+        <form action="${pageContext.request.contextPath}/login" method="post">
             Login:<input type="text" name="chLogin"/>
             <br><br>
             
