@@ -39,7 +39,7 @@
                         <td><c:out value="${employe.prenom}"/></td>
                         <td><c:out value="${employe.teldom}"/></td>
                         <td><c:out value="${employe.telport}"/></td>
-                        <td><c:out value="${employe.telperso}"/></td>
+                        <td><c:out value="${employe.telpro}"/></td>
                         <td><c:out value="${employe.adresse}"/></td>
                         <td><c:out value="${employe.codepostal}"/></td>
                         <td><c:out value="${employe.ville}"/></td>

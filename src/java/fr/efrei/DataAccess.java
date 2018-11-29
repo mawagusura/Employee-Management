@@ -31,12 +31,8 @@ public class DataAccess {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
             this.connection = DriverManager.getConnection(url,user,password);
         }
-        catch(SQLException | ClassNotFoundException ex){
+        catch(SQLException | ClassNotFoundException | InstantiationException | IllegalAccessException ex){
              Logger.getLogger(DataAccess.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            Logger.getLogger(DataAccess.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            Logger.getLogger(DataAccess.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
@@ -49,6 +45,17 @@ public class DataAccess {
             Employes employes;
             while(rs.next()){
                 employes=new Employes();
+                employes.setId(rs.getInt("ID"));
+                employes.setNom(rs.getString("NOM"));
+                employes.setPrenom(rs.getString("PRENOM"));
+                employes.setTeldom(rs.getString("TELDOM"));
+                employes.setTelport(rs.getString("TELPORT"));
+                employes.setTelpro(rs.getString("TELPRO"));
+                employes.setAdresse(rs.getString("ADRESSE"));
+                employes.setCodepostal(rs.getString("CODEPOSTAL"));
+                employes.setVille(rs.getString("VILLE"));
+                employes.setEmail(rs.getString("EMAIL"));
+                listEmployes.add(employes);
             }            
             rs.close();
         } catch (SQLException ex) {
