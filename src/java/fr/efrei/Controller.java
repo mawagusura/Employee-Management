@@ -32,7 +32,15 @@ public class Controller extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        switch(request.getParameter("action")){
+        String action;
+        
+        if(request.getAttribute("action") != null) {
+            action= request.getAttribute("action").toString();
+        } else {
+            action = "login";
+        }
+        
+        switch(action){
             case "login":
                 this.login(request,response);
                 break;
@@ -46,8 +54,7 @@ public class Controller extends HttpServlet {
                 this.details(request,response);
                 break;
             default:
-                this.getServletContext().getRequestDispatcher("/WEB-INF/index.jsp").forward(request, response);
-                   
+                this.getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
         }
     }
 
@@ -106,11 +113,11 @@ public class Controller extends HttpServlet {
         if(id!=null){
             session.setAttribute("identifiant", id);
             session.setAttribute("employes", dataAccess.getEmployes(prop.getProperty("SQL_ALL_EMPLOYEES")));
-            this.getServletContext().getRequestDispatcher("/WEB-INF/bienvenue.jsp").forward(request, response);
+            this.getServletContext().getRequestDispatcher("/WEB-INF/employees-list.jsp").forward(request, response);
         }
         else{
             session.setAttribute("message_erreur", "Identifiant ou mot de passe incorrect");
-            this.getServletContext().getRequestDispatcher("/WEB-INF/index.jsp").forward(request, response);
+            this.getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
         }
         dataAccess.closeConnection();
     }

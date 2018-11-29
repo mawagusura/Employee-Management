@@ -1,0 +1,11 @@
+.login-card {
+    width: 25%;
+    margin-top: 10%;
+    min-width: 300px;
+}
+
+.details-form {
+    width: 45%;
+    min-width: 500px;
+    margin-top: 10%;
+}
