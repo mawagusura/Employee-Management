@@ -31,33 +31,23 @@ public class Controller extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        HttpSession session=request.getSession(true);
         
-        String login=request.getParameter("chLogin");
-        String password=request.getParameter("chPassword");
-        
-        if(login==null || password==null){
-            this.getServletContext().getRequestDispatcher("/WEB-INF/index.jsp").forward(request, response);
-        }
-        else{
-            Properties prop= new Properties();
-            InputStream input= request.getServletContext().getResourceAsStream("/WEB-INF/db.properties");
-            prop.load(input);
-            
-            DataAccess dataAccess=new DataAccess(prop.getProperty("dbUrl"),prop.getProperty("dbUser"),prop.getProperty("dbPassword"));
-            
-            Identifiant id = dataAccess.getIdentifiant(prop.getProperty("SQL_LOGIN_PREPARED"),login,password);
-            
-            if(id!=null){
-                session.setAttribute("identifiant", id);
-                session.setAttribute("employes", dataAccess.getEmployes(prop.getProperty("SQL_ALL_EMPLOYEES")));
-                this.getServletContext().getRequestDispatcher("/WEB-INF/bienvenue.jsp").forward(request, response);
-            }
-            else{
-                session.setAttribute("message_erreur", "Identifiant ou mot de passe incorrect");
+        switch(request.getParameter("action")){
+            case "login":
+                this.login(request,response);
+                break;
+            case "delete":
+                this.delete(request,response);
+                break;
+            case "add":
+                this.add(request,response);
+                break;
+            case "details":
+                this.details(request,response);
+                break;
+            default:
                 this.getServletContext().getRequestDispatcher("/WEB-INF/index.jsp").forward(request, response);
-            }
-            dataAccess.closeConnection();
+                   
         }
     }
 
@@ -99,5 +89,42 @@ public class Controller extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+
+    private void login(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session=request.getSession(true);
+        
+        String login=request.getParameter("chLogin");
+        String password=request.getParameter("chPassword");
+        Properties prop= new Properties();
+        InputStream input= request.getServletContext().getResourceAsStream("/WEB-INF/db.properties");
+        prop.load(input);
+            
+        DataAccess dataAccess=new DataAccess(prop.getProperty("dbUrl"),prop.getProperty("dbUser"),prop.getProperty("dbPassword"));
+        
+        Identifiant id = dataAccess.getIdentifiant(prop.getProperty("SQL_LOGIN_PREPARED"),login,password);
+            
+        if(id!=null){
+            session.setAttribute("identifiant", id);
+            session.setAttribute("employes", dataAccess.getEmployes(prop.getProperty("SQL_ALL_EMPLOYEES")));
+            this.getServletContext().getRequestDispatcher("/WEB-INF/bienvenue.jsp").forward(request, response);
+        }
+        else{
+            session.setAttribute("message_erreur", "Identifiant ou mot de passe incorrect");
+            this.getServletContext().getRequestDispatcher("/WEB-INF/index.jsp").forward(request, response);
+        }
+        dataAccess.closeConnection();
+    }
+
+    private void delete(HttpServletRequest request, HttpServletResponse response) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    private void add(HttpServletRequest request, HttpServletResponse response) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    private void details(HttpServletRequest request, HttpServletResponse response) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }
 
