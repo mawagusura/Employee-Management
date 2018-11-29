@@ -6,7 +6,7 @@
 package fr.efrei.Controllers;
 
 import fr.efrei.DataAccess;
-import fr.efrei.Identifiant;
+import fr.efrei.entities.Identifiant;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;

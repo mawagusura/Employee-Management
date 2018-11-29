@@ -5,6 +5,8 @@
  */
 package fr.efrei;
 
+import fr.efrei.entities.Identifiant;
+import fr.efrei.entities.Employes;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
