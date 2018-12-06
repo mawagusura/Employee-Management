@@ -9,39 +9,37 @@
     </head>
     <body>
         <div class="d-block mx-auto details-form">
-            <form action="${pageContext.request.contextPath}" method="post">
-                <input type="hidden" class="form-control" id="employes-id" name="employes-id" value="${employe.id}">
-                
-                <legend>Détails du membre ${employe.prenom} ${employe.nom}</legend>
+            <form action="${pageContext.request.contextPath}" method="post">                
+                <legend>Nouvel utilisateur</legend>
                 <hr>
                 <div class="form-group row">
                     <label for="name" class="col-sm-2 col-form-label">Nom</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" id="name" name="employes-nom" value="${employe.nom}">
+                        <input type="text" class="form-control" id="name" name="employes-nom" placeholder="Nom">
                     </div>
                 </div>
                 <div class="form-group row">
                     <label for="first-name" class="col-sm-2 col-form-label">Prénom</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" id="first-name" name="employes-prenom" value="${employe.prenom}">
+                        <input type="text" class="form-control" id="first-name" name="employes-prenom" placeholder="Prénom">
                     </div>
                 </div>
                 <div class="form-group row">
                     <label for="fixed-phone" class="col-sm-2 col-form-label">Tél dom</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" id="fixed-phone" name="employes-teldom" value="${employe.teldom}">
+                        <input type="text" class="form-control" id="fixed-phone" name="employes-teldom" placeholder="Tél. domicile">
                     </div>
                 </div>
                 <div class="form-group row">
                     <label for="mobile-phone" class="col-sm-2 col-form-label">Tél mob</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" id="mobile-phone" name="employes-telperso"value="${employe.telport}">
+                        <input type="text" class="form-control" id="mobile-phone" name="employes-telperso" placeholder="Tél. mobile">
                     </div>
                 </div>
                 <div class="form-group row">
                     <label for="pro-phone" class="col-sm-2 col-form-label">Tél pro</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" id="pro-phone" name="employes-telport" value="${employe.telpro}">
+                        <input type="text" class="form-control" id="pro-phone" name="employes-telport" placeholder="Tél. professionnel">
                     </div>
                 </div>
 
@@ -50,7 +48,7 @@
                         <div class="form-group row">
                             <label for="address" class="col-sm-4 col-form-label">Adresse</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" id="address" name="employes-adresse" value="${employe.adresse}">
+                                <input type="text" class="form-control" id="address" name="employes-adresse" placeholder="Adresse">
                             </div>
                         </div>
                     </div>
@@ -58,7 +56,7 @@
                         <div class="form-group row">
                             <label for="postal" class="col-sm-5 col-form-label">Code postal</label>
                             <div class="col-sm-7">
-                                <input type="text" class="form-control" id="postal" name="employes-codepostal" value="${employe.codepostal}">
+                                <input type="text" class="form-control" id="postal" name="employes-codepostal" placeholder="Code postal">
                             </div>
                         </div>
                     </div>
@@ -69,7 +67,7 @@
                         <div class="form-group row">
                             <label for="country" class="col-sm-4 col-form-label">Ville</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" id="country" name="employes-ville" value="${employe.ville}">
+                                <input type="text" class="form-control" id="country" name="employes-ville" placeholder="Adresse">
                             </div>
                         </div>
                     </div>
@@ -77,14 +75,14 @@
                         <div class="form-group row">
                             <label for="mail" class="col-sm-5 col-form-label">Email</label>
                             <div class="col-sm-7">
-                                <input type="text" class="form-control" id="mail" name="employes-email" value="${employe.email}">
+                                <input type="text" class="form-control" id="mail" name="employes-email" placeholder="Email">
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <div class="float-right">
-                    <input type="submit" value="update" class="btn btn-primary ml-1">
+                    <input type="submit" value="add" class="btn btn-primary ml-1">
                     <a href="employees-list.html"><button class="btn ml-1">Voir liste</button></a>
                 </div>
             </form>

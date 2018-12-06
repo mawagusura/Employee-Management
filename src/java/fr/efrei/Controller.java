@@ -182,7 +182,7 @@ public class Controller extends HttpServlet {
             session.setAttribute("message_erreur","Echec de l'ajout");
             session.setAttribute("message_info","");
         }
-        this.getServletContext().getRequestDispatcher("/WEB-INF/add-employes.jsp").forward(request, response);
+        this.getServletContext().getRequestDispatcher("/WEB-INF/new-employee.jsp").forward(request, response);
         dataAccess.closeConnection();
     }
 
