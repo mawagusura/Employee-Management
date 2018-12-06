@@ -5,7 +5,7 @@
 <html>
     <head>
         <!-- title -->
-        <title>Liste des employÃ©s</title>
+        <title>Liste des employés</title>
         <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
         <link rel="stylesheet" href="styles.css">
         <meta charset="utf-8">
@@ -18,7 +18,7 @@
             <p class="text-primary m-2">${message_info}</p>
             
             <c:choose>
-                <c:when test="${ employes.size == 0 }">
+                <c:when test="${ employes.size() == 0 }">
                     <p class="text-danger m-2">Nous devons recruter !</p>
                 </c:when>
                 <c:otherwise>

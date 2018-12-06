@@ -38,7 +38,7 @@ public class DataAccess {
     
     
     public List<Employes> getEmployes(String sql) {
-        List<Employes> listEmployes=new ArrayList<>();
+        List<Employes> listEmployes=new ArrayList<Employes>();
         try{
             Statement stm = connection.createStatement();
             ResultSet rs=stm.executeQuery(sql);
@@ -60,6 +60,7 @@ public class DataAccess {
             rs.close();
         } catch (SQLException ex) {
             Logger.getLogger(DataAccess.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
         }
         
         return listEmployes;

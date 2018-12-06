@@ -7,6 +7,7 @@ package fr.efrei;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 import java.util.Properties;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -117,11 +118,20 @@ public class Controller extends HttpServlet {
         Identifiant id = dataAccess.getIdentifiant(prop.getProperty("SQL_LOGIN_PREPARED"),login,password);
             
         if(id!=null){
-            session.setAttribute("identifiant", id);
-            session.setAttribute("message_erreur","");
-            session.setAttribute("message_info","");
-            session.setAttribute("employes", dataAccess.getEmployes(prop.getProperty("SQL_ALL_EMPLOYEES")));
-            this.getServletContext().getRequestDispatcher("/WEB-INF/employees-list.jsp").forward(request, response);
+            List<Employes> listEmployes=dataAccess.getEmployes(prop.getProperty("SQL_ALL_EMPLOYEES"));
+            if(listEmployes != null){
+                session.setAttribute("identifiant", id);
+                session.setAttribute("message_erreur","");
+                session.setAttribute("message_info","");
+                session.setAttribute("employes", listEmployes);
+                this.getServletContext().getRequestDispatcher("/WEB-INF/employees-list.jsp").forward(request, response);
+            }
+            else{
+                session.setAttribute("identifiant", id);
+                session.setAttribute("message_erreur","Erreur de la connexion à la base de donnée");
+                session.setAttribute("message_info","");
+                this.getServletContext().getRequestDispatcher("/WEB-INF/employees-list.jsp").forward(request, response);
+            }
         }
         else{
             session.setAttribute("message_info","");
