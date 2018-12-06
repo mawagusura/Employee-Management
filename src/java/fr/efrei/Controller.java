@@ -176,6 +176,7 @@ public class Controller extends HttpServlet {
         if(employes !=null){
             session.setAttribute("message_erreur","");
             session.setAttribute("message_info","");
+            session.setAttribute("employe",employes);
         this.getServletContext().getRequestDispatcher("/WEB-INF/details.jsp").forward(request, response);
         }
         else{
