@@ -55,7 +55,13 @@ public class Controller extends HttpServlet {
                 this.update(request,response);
                 break;
             default:
-                this.getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
+                if(request.getAttribute("identifiant")!=null){
+                    this.home(request, response);
+                }
+                else{
+                    this.getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);   
+                }
+                break;
         }
     }
 
@@ -105,6 +111,14 @@ public class Controller extends HttpServlet {
         return prop;
     }
     
+    private void home(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+        HttpSession session=request.getSession(true);
+        Properties prop= this.initProperty(request);    
+        DataAccess dataAccess=new DataAccess(prop.getProperty("dbUrl"),prop.getProperty("dbUser"),prop.getProperty("dbPassword"));
+        List<Employes> listEmployes=dataAccess.getEmployes(prop.getProperty("SQL_ALL_EMPLOYEES"));
+        session.setAttribute("employes", listEmployes);
+        this.getServletContext().getRequestDispatcher("/WEB-INF/employees-list.jsp").forward(request, response);
+    }
     
     private void login(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session=request.getSession(true);
@@ -119,19 +133,11 @@ public class Controller extends HttpServlet {
             
         if(id!=null){
             List<Employes> listEmployes=dataAccess.getEmployes(prop.getProperty("SQL_ALL_EMPLOYEES"));
-            if(listEmployes != null){
-                session.setAttribute("identifiant", id);
-                session.setAttribute("message_erreur","");
-                session.setAttribute("message_info","");
-                session.setAttribute("employes", listEmployes);
-                this.getServletContext().getRequestDispatcher("/WEB-INF/employees-list.jsp").forward(request, response);
-            }
-            else{
-                session.setAttribute("identifiant", id);
-                session.setAttribute("message_erreur","Erreur de la connexion à la base de donnée");
-                session.setAttribute("message_info","");
-                this.getServletContext().getRequestDispatcher("/WEB-INF/employees-list.jsp").forward(request, response);
-            }
+            session.setAttribute("identifiant", id);
+            session.setAttribute("message_erreur","");
+            session.setAttribute("message_info","");
+            session.setAttribute("employes", listEmployes);
+            this.getServletContext().getRequestDispatcher("/WEB-INF/employees-list.jsp").forward(request, response);
         }
         else{
             session.setAttribute("message_info","");
@@ -148,11 +154,11 @@ public class Controller extends HttpServlet {
         DataAccess dataAccess=new DataAccess(prop.getProperty("dbUrl"),prop.getProperty("dbUser"),prop.getProperty("dbPassword"));
         if(dataAccess.delete(prop.getProperty("SQL_DELETE_EMPLOYEES"),request.getParameter("employes-id"))){
             session.setAttribute("message_erreur","");
-            session.setAttribute("message_info","La suppression à réussi");
+            session.setAttribute("message_info","La suppression a réussi");
             session.setAttribute("employes", dataAccess.getEmployes(prop.getProperty("SQL_ALL_EMPLOYEES")));
         }
         else{
-            session.setAttribute("message_erreur","La supression à échoué");
+            session.setAttribute("message_erreur","La supression a échoué");
             session.setAttribute("message_info","");
         }
         this.getServletContext().getRequestDispatcher("/WEB-INF/employees-list.jsp").forward(request, response);
