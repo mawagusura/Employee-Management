@@ -149,6 +149,7 @@ public class Controller extends HttpServlet {
         if(dataAccess.delete(prop.getProperty("SQL_DELETE_EMPLOYEES"),request.getParameter("employes-id"))){
             session.setAttribute("message_erreur","");
             session.setAttribute("message_info","La suppression à réussi");
+            session.setAttribute("employes", dataAccess.getEmployes(prop.getProperty("SQL_ALL_EMPLOYEES")));
         }
         else{
             session.setAttribute("message_erreur","La supression à échoué");
@@ -168,6 +169,8 @@ public class Controller extends HttpServlet {
         if(dataAccess.delete(prop.getProperty("SQL_DELETE_EMPLOYEES"),request.getParameter("employes-id"))){
             session.setAttribute("message_erreur","");
             session.setAttribute("message_info","Succès de l'ajout");
+            
+            session.setAttribute("employes", dataAccess.getEmployes(prop.getProperty("SQL_ALL_EMPLOYEES")));
         }
         else{
             session.setAttribute("message_erreur","Echec de l'ajout");
