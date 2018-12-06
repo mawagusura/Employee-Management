@@ -182,7 +182,7 @@ public class Controller extends HttpServlet {
         else{
             session.setAttribute("message_erreur","Erreur de la connexion à la base de donnée");
             session.setAttribute("message_info","");
-        this.getServletContext().getRequestDispatcher("/WEB-INF/details.jsp").forward(request, response);
+        this.getServletContext().getRequestDispatcher("/WEB-INF/employees-list.jsp").forward(request, response);
         }
         dataAccess.closeConnection();
     }
