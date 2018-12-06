@@ -14,7 +14,13 @@ public class Employes {
     private String nom;
     private String prenom;
     private String teldom;
-
+    private String telport;
+    private String telpro;
+    private String adresse;
+    private String codepostal;
+    private String ville;
+    private String email;
+    
     public int getId() {
         return id;
     }
@@ -94,12 +100,6 @@ public class Employes {
     public void setEmail(String email) {
         this.email = email;
     }
-    private String telport;
-    private String telpro;
-    private String adresse;
-    private String codepostal;
-    private String ville;
-    private String email;
     
     public Employes(){
         

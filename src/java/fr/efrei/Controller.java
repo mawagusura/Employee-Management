@@ -50,6 +50,9 @@ public class Controller extends HttpServlet {
             case "details":
                 this.details(request,response);
                 break;
+            case "update":
+                this.update(request,response);
+                break;
             default:
                 this.getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
         }
@@ -101,6 +104,7 @@ public class Controller extends HttpServlet {
         return prop;
     }
     
+    
     private void login(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session=request.getSession(true);
         
@@ -114,10 +118,13 @@ public class Controller extends HttpServlet {
             
         if(id!=null){
             session.setAttribute("identifiant", id);
+            session.setAttribute("message_erreur","");
+            session.setAttribute("message_info","");
             session.setAttribute("employes", dataAccess.getEmployes(prop.getProperty("SQL_ALL_EMPLOYEES")));
             this.getServletContext().getRequestDispatcher("/WEB-INF/employees-list.jsp").forward(request, response);
         }
         else{
+            session.setAttribute("message_info","");
             session.setAttribute("message_erreur", "Identifiant ou mot de passe incorrect");
             this.getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
         }
@@ -129,18 +136,84 @@ public class Controller extends HttpServlet {
         HttpSession session=request.getSession(true);
         
         DataAccess dataAccess=new DataAccess(prop.getProperty("dbUrl"),prop.getProperty("dbUser"),prop.getProperty("dbPassword"));
-        session.setAttribute("sql-status",dataAccess.delete(prop.getProperty("SQL_DELETE_EMPLOYEES"),request.getParameter("employes-id")));
-        this.getServletContext().getRequestDispatcher("/WEB-INF/index.jsp").forward(request, response);
+        if(dataAccess.delete(prop.getProperty("SQL_DELETE_EMPLOYEES"),request.getParameter("employes-id"))){
+            session.setAttribute("message_erreur","");
+            session.setAttribute("message_info","La suppression à réussi");
+        }
+        else{
+            session.setAttribute("message_erreur","La supression à échoué");
+            session.setAttribute("message_info","");
+        }
+        this.getServletContext().getRequestDispatcher("/WEB-INF/employees-list.jsp").forward(request, response);
         dataAccess.closeConnection();
         
     }
     
-    private void add(HttpServletRequest request, HttpServletResponse response) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    private void add(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        Properties prop= this.initProperty(request);
+        HttpSession session=request.getSession(true);
+        
+        DataAccess dataAccess=new DataAccess(prop.getProperty("dbUrl"),prop.getProperty("dbUser"),prop.getProperty("dbPassword"));
+        
+        if(dataAccess.delete(prop.getProperty("SQL_DELETE_EMPLOYEES"),request.getParameter("employes-id"))){
+            session.setAttribute("message_erreur","");
+            session.setAttribute("message_info","Succès de l'ajout");
+        }
+        else{
+            session.setAttribute("message_erreur","Echec de l'ajout");
+            session.setAttribute("message_info","");
+        }
+        this.getServletContext().getRequestDispatcher("/WEB-INF/add-employes.jsp").forward(request, response);
+        dataAccess.closeConnection();
     }
 
-    private void details(HttpServletRequest request, HttpServletResponse response) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    private void details(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        Properties prop= this.initProperty(request);
+        HttpSession session=request.getSession(true);
+        
+        DataAccess dataAccess=new DataAccess(prop.getProperty("dbUrl"),prop.getProperty("dbUser"),prop.getProperty("dbPassword"));
+        Employes employes =dataAccess.getEmployes(prop.getProperty("SQL_DETAILS_EMPLOYES"),request.getParameter("employes-id"));
+        if(employes !=null){
+            session.setAttribute("message_erreur","");
+            session.setAttribute("message_info","");
+        this.getServletContext().getRequestDispatcher("/WEB-INF/details.jsp").forward(request, response);
+        }
+        else{
+            session.setAttribute("message_erreur","Erreur de la connexion à la base de donnée");
+            session.setAttribute("message_info","");
+        this.getServletContext().getRequestDispatcher("/WEB-INF/details.jsp").forward(request, response);
+        }
+        dataAccess.closeConnection();
+    }
+    
+    private void update(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        Properties prop= this.initProperty(request);
+        HttpSession session=request.getSession(true);
+        
+        DataAccess dataAccess=new DataAccess(prop.getProperty("dbUrl"),prop.getProperty("dbUser"),prop.getProperty("dbPassword"));
+        Employes employes=new Employes();
+        employes.setId(Integer.parseInt(request.getParameter("employes-id")));
+        employes.setNom(request.getParameter("employes-nom"));
+        employes.setPrenom(request.getParameter("employes-prenom"));
+        employes.setEmail(request.getParameter("employes-email"));
+        employes.setTeldom(request.getParameter("employes-teldom"));
+        employes.setTelport(request.getParameter("employes-telport"));
+        employes.setTelpro(request.getParameter("employes-telperso"));
+        employes.setAdresse(request.getParameter("employes-adressse"));
+        employes.setVille(request.getParameter("employes-ville"));
+        employes.setCodepostal(request.getParameter("employes-codepostal"));
+        
+        if(dataAccess.updateEmployes(prop.getProperty("SQL_UPDATE_EMPLOYES"),employes)){
+            session.setAttribute("message_erreur","Succes de la mise à jour");
+            session.setAttribute("message_info","");
+        this.getServletContext().getRequestDispatcher("/WEB-INF/details.jsp").forward(request, response);
+        }
+        else{
+            session.setAttribute("message_erreur","Erreur dans la mise à jour");
+            session.setAttribute("message_info","");
+        this.getServletContext().getRequestDispatcher("/WEB-INF/details.jsp").forward(request, response);
+        }
+        dataAccess.closeConnection();
     }
 }
 
