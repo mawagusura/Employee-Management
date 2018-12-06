@@ -14,7 +14,7 @@
         <form action="${pageContext.request.contextPath}" method="post">
             <legend class="m-2"><b>Liste des employés</b></legend>
             
-            <p class="text-danger m-2">${message_error}</p>
+            <p class="text-danger m-2">${message_erreur}</p>
             <p class="text-primary m-2">${message_info}</p>
             
             <c:choose>
@@ -40,7 +40,7 @@
                         <tbody>
                             <c:forEach items="${ employes }" var="employe" >
                                 <tr>
-                                    <th scope="row"><input type="radio" name="employee" value="${employe.id}" id="employee_${employe.id}"></th>
+                                    <th scope="row"><input type="radio" name="employes-id" value="${employe.id}" id="employee_${employe.id}"></th>
                                     <td><c:out value="${employe.nom}"/></td>
                                     <td><c:out value="${employe.prenom}"/></td>
                                     <td><c:out value="${employe.teldom}"/></td>

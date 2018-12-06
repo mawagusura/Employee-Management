@@ -54,6 +54,9 @@ public class Controller extends HttpServlet {
             case "update":
                 this.update(request,response);
                 break;
+            case "logout":
+                this.logout(request,response);
+                break;
             default:
                 if(request.getAttribute("identifiant")!=null){
                     this.home(request, response);
@@ -109,6 +112,11 @@ public class Controller extends HttpServlet {
         InputStream input= request.getServletContext().getResourceAsStream("/WEB-INF/db.properties");
         prop.load(input);
         return prop;
+    }
+    
+    private void logout(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+        request.removeAttribute("identifiant");
+        this.getServletContext().getRequestDispatcher("/WEB-INF/employees-list.jsp").forward(request, response);
     }
     
     private void home(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
@@ -196,7 +204,7 @@ public class Controller extends HttpServlet {
             session.setAttribute("message_erreur","");
             session.setAttribute("message_info","");
             session.setAttribute("employe",employes);
-        this.getServletContext().getRequestDispatcher("/WEB-INF/details.jsp").forward(request, response);
+            this.getServletContext().getRequestDispatcher("/WEB-INF/details.jsp").forward(request, response);
         }
         else{
             session.setAttribute("message_erreur","Erreur de la connexion à la base de donnée");
