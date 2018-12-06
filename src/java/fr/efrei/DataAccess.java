@@ -56,7 +56,7 @@ public class DataAccess {
                 employes.setVille(rs.getString("VILLE"));
                 employes.setEmail(rs.getString("EMAIL"));
                 listEmployes.add(employes);
-            }            
+            }
             rs.close();
         } catch (SQLException ex) {
             Logger.getLogger(DataAccess.class.getName()).log(Level.SEVERE, null, ex);

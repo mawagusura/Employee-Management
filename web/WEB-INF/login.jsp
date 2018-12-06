@@ -27,7 +27,7 @@
                             <input type="text" name="chLogin" class="form-control" placeholder="Login">
                             <input type="password" name="chPassword" class="form-control mt-2" placeholder="Mot de passe">
                             <input type="hidden" name="action" value="login">
-                            <input type="submit" class="btn btn-primary mt-2" value="Login">
+                            <input type="submit" class="btn btn-primary mt-2" value="login">
                         </div>
                     </form>
                 </div>
