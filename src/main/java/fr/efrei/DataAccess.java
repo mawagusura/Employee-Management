@@ -96,4 +96,51 @@ public class DataAccess {
             Logger.getLogger(DataAccess.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    public Employes getEmployes(String sql, String id) {
+        Employes employes=null;
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, id);
+            ResultSet rs=preparedStatement.executeQuery();
+            while(rs.next()){
+                employes=new Employes();
+                employes.setId(rs.getInt("ID"));
+                employes.setNom(rs.getString("NOM"));
+                employes.setPrenom(rs.getString("PRENOM"));
+                employes.setTeldom(rs.getString("TELDOM"));
+                employes.setTelport(rs.getString("TELPORT"));
+                employes.setTelpro(rs.getString("TELPRO"));
+                employes.setAdresse(rs.getString("ADRESSE"));
+                employes.setCodepostal(rs.getString("CODEPOSTAL"));
+                employes.setVille(rs.getString("VILLE"));
+                employes.setEmail(rs.getString("EMAIL"));
+            }
+            
+            return employes;
+        } catch (SQLException ex) {
+            Logger.getLogger(DataAccess.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
+    }
+
+    public boolean updateEmployes(String sql, Employes employes) {
+        try {PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, employes.getNom());
+            preparedStatement.setString(2, employes.getPrenom());
+            preparedStatement.setString(3, employes.getTeldom());
+            preparedStatement.setString(4, employes.getTelport());
+            preparedStatement.setString(5, employes.getTelpro());
+            preparedStatement.setString(6, employes.getAdresse());
+            preparedStatement.setString(7, employes.getCodepostal());
+            preparedStatement.setString(8, employes.getVille());
+            preparedStatement.setString(9, employes.getEmail());
+            preparedStatement.setInt(10, employes.getId());
+            return true;
+        } catch (SQLException ex) {
+            Logger.getLogger(DataAccess.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
+    }
+
 }

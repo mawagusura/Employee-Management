@@ -31,7 +31,7 @@ public class DefautController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        this.getServletContext().getRequestDispatcher("/WEB-INF/index.jsp").forward(request, response);
+        response.sendRedirect("http://localhost:8080/employee-management/login");
 
     }
 
