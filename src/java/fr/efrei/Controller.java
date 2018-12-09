@@ -21,6 +21,40 @@ import javax.servlet.http.HttpSession;
  */
 public class Controller extends HttpServlet {
 
+    private static final String PARAMETER_ACTION = "action";
+    private static final String PARAMETER_LOGIN = "login";    
+    private static final String PARAMETER_DELETE = "delete";
+    private static final String PARAMETER_ADD = "add";
+    private static final String PARAMETER_DETAILS = "details";
+    private static final String PARAMETER_UPDATE = "update";
+    private static final String PARAMETER_LOGOUT = "logout";
+    private static final String PARAMETER_CH_LOGIN="chLogin";
+    private static final String PARAMETER_CH_PASSWORD="chPassword";
+    
+    
+    
+    private static final String ATTRIBUT_IDENTIFIANT = "identifiant";
+    private static final String ATTRIBUT_MESSAGE_ERROR = "message_error";
+    private static final String ATTRIBUT_MESSAGE_INFO = "message_info";
+    private static final String ATTRIBUT_EMPLOYEES="employees";
+    private static final String ATTRIBUT_EMPLOYEE="employee";
+    
+    private static final String PAGE_LOGIN="/WEB-INF/login.jsp";
+    private static final String PAGE_DETAILS="/WEB-INF/details.jsp";
+    private static final String PAGE_EMPLOYEES_LIST="/WEB-INF/employees-list.jsp";
+    private static final String PAGE_NEW_EMPLOYE="/WEB-INF/new-employee.jsp";
+    private static final String PAGE_PROPERTIES="/WEB-INF/db.properties";
+    
+    private static final String PROPERTIES_SQL_UPDATE_EMPLOYEES="SQL_UPDATE_EMPLOYES";
+    private static final String PROPERTIES_SQL_DETAILS_EMPLOYEES="SQL_DETAILS_EMPLOYES";        
+    private static final String PROPERTIES_SQL_ALL_EMPLOYEES="SQL_ALL_EMPLOYEES";
+    private static final String PROPERTIES_SQL_DELETE_EMPLOYEES="SQL_DELETE_EMPLOYEES";
+    private static final String PROPERTIES_SQL_LOGIN="SQL_LOGIN_PREPARED";
+    private static final String PROPERTIES_DB_URL="dbUrl";
+    private static final String PROPERTIES_DB_USER="dbUser";
+    private static final String PROPERTIES_DB_PASSWORD="dbPassword";
+    
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -32,40 +66,41 @@ public class Controller extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+        HttpSession session = request.getSession(true);
         String action="";
-        if(request.getParameter("action")!=null){
-            action=(String)request.getParameter("action");
+        if(request.getParameter(PARAMETER_ACTION)!=null){
+            action=(String)request.getParameter(PARAMETER_ACTION);
         }
         
-        switch(action){
-            case "login":
-                this.login(request,response);
-                break;
-            case "delete":
-                this.delete(request,response);
-                break;
-            case "add":
-                this.add(request,response);
-                break;
-            case "details":
-                this.details(request,response);
-                break;
-            case "update":
-                this.update(request,response);
-                break;
-            case "logout":
-                this.logout(request,response);
-                break;
-            default:
-                if(request.getAttribute("identifiant")!=null){
-                    this.home(request, response);
-                }
-                else{
-                    this.getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);   
-                }
-                break;
+        if(session.getAttribute(ATTRIBUT_IDENTIFIANT)==null && !action.equals(PARAMETER_LOGIN)){
+            this.getServletContext().getRequestDispatcher(PAGE_LOGIN).forward(request, response);
         }
+        else{
+
+            switch(action){
+                case PARAMETER_LOGIN:
+                    this.login(request,response);
+                    break;
+                case PARAMETER_DELETE:
+                    this.delete(request,response);
+                    break;
+                case PARAMETER_ADD:
+                    this.add(request,response);
+                    break;
+                case PARAMETER_DETAILS:
+                    this.details(request,response);
+                    break;
+                case PARAMETER_UPDATE:
+                    this.update(request,response);
+                    break;
+                case PARAMETER_LOGOUT:
+                    this.logout(request,response);
+                    break;
+                default:
+                    this.home(request, response);
+            }
+        }
+        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -109,137 +144,125 @@ public class Controller extends HttpServlet {
 
     private Properties initProperty(HttpServletRequest request) throws IOException{
         Properties prop= new Properties();
-        InputStream input= request.getServletContext().getResourceAsStream("/WEB-INF/db.properties");
+        InputStream input= request.getServletContext().getResourceAsStream(PAGE_PROPERTIES);
         prop.load(input);
         return prop;
     }
-    
+    private DataAccess getDataAccess(Properties prop){
+        return new DataAccess(prop.getProperty(PROPERTIES_DB_URL),prop.getProperty(PROPERTIES_DB_USER),prop.getProperty(PROPERTIES_DB_PASSWORD));
+    }
+        
     private void logout(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
-        request.removeAttribute("identifiant");
-        this.getServletContext().getRequestDispatcher("/WEB-INF/employees-list.jsp").forward(request, response);
+        HttpSession session=request.getSession(true);
+        session.removeAttribute(ATTRIBUT_IDENTIFIANT);
+        //TODO
+        this.getServletContext().getRequestDispatcher(PAGE_EMPLOYEES_LIST).forward(request, response);
     }
     
     private void home(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
-        HttpSession session=request.getSession(true);
         Properties prop= this.initProperty(request);    
-        DataAccess dataAccess=new DataAccess(prop.getProperty("dbUrl"),prop.getProperty("dbUser"),prop.getProperty("dbPassword"));
-        List<Employes> listEmployes=dataAccess.getEmployes(prop.getProperty("SQL_ALL_EMPLOYEES"));
-        session.setAttribute("employes", listEmployes);
-        this.getServletContext().getRequestDispatcher("/WEB-INF/employees-list.jsp").forward(request, response);
+        DataAccess dataAccess=getDataAccess(prop);;
+        request.setAttribute(ATTRIBUT_EMPLOYEES, dataAccess.getEmployes(prop.getProperty(PROPERTIES_SQL_ALL_EMPLOYEES)));
+        this.getServletContext().getRequestDispatcher(PAGE_EMPLOYEES_LIST).forward(request, response);
+        
+        dataAccess.closeConnection();
     }
     
     private void login(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session=request.getSession(true);
         
-        String login=request.getParameter("chLogin");
-        String password=request.getParameter("chPassword");
+        String login=request.getParameter(PARAMETER_CH_LOGIN);
+        String password=request.getParameter(PARAMETER_CH_PASSWORD);
         Properties prop= this.initProperty(request);
             
-        DataAccess dataAccess=new DataAccess(prop.getProperty("dbUrl"),prop.getProperty("dbUser"),prop.getProperty("dbPassword"));
-        
-        Identifiant id = dataAccess.getIdentifiant(prop.getProperty("SQL_LOGIN_PREPARED"),login,password);
+        DataAccess dataAccess=getDataAccess(prop);
+        Identifiant id = dataAccess.getIdentifiant(prop.getProperty(PROPERTIES_SQL_LOGIN),login,password);
             
         if(id!=null){
-            List<Employes> listEmployes=dataAccess.getEmployes(prop.getProperty("SQL_ALL_EMPLOYEES"));
-            session.setAttribute("identifiant", id);
-            session.setAttribute("message_erreur","");
-            session.setAttribute("message_info","");
-            session.setAttribute("employes", listEmployes);
-            this.getServletContext().getRequestDispatcher("/WEB-INF/employees-list.jsp").forward(request, response);
+            session.setAttribute(ATTRIBUT_IDENTIFIANT, id);
+            request.setAttribute(ATTRIBUT_EMPLOYEES, dataAccess.getEmployes(prop.getProperty(PROPERTIES_SQL_ALL_EMPLOYEES)));
+            this.getServletContext().getRequestDispatcher(PAGE_EMPLOYEES_LIST).forward(request, response);
         }
         else{
-            session.setAttribute("message_info","");
-            session.setAttribute("message_erreur", "Identifiant ou mot de passe incorrect");
-            this.getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
+            request.setAttribute(ATTRIBUT_MESSAGE_ERROR, "Identifiant ou mot de passe incorrect");
+            this.getServletContext().getRequestDispatcher(PAGE_LOGIN).forward(request, response);
         }
         dataAccess.closeConnection();
     }
 
     private void delete(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         Properties prop= this.initProperty(request);
-        HttpSession session=request.getSession(true);
+        DataAccess dataAccess=getDataAccess(prop);
         
-        DataAccess dataAccess=new DataAccess(prop.getProperty("dbUrl"),prop.getProperty("dbUser"),prop.getProperty("dbPassword"));
-        if(dataAccess.delete(prop.getProperty("SQL_DELETE_EMPLOYEES"),request.getParameter("employes-id"))){
-            session.setAttribute("message_erreur","");
-            session.setAttribute("message_info","La suppression a réussi");
-            session.setAttribute("employes", dataAccess.getEmployes(prop.getProperty("SQL_ALL_EMPLOYEES")));
+        if(dataAccess.delete(prop.getProperty(PROPERTIES_SQL_DELETE_EMPLOYEES),request.getParameter("employes-id"))){
+            request.setAttribute(ATTRIBUT_MESSAGE_INFO,"La suppression a réussi");
         }
         else{
-            session.setAttribute("message_erreur","La supression a échoué");
-            session.setAttribute("message_info","");
+            request.setAttribute(ATTRIBUT_MESSAGE_ERROR,"La supression a échoué");
         }
-        this.getServletContext().getRequestDispatcher("/WEB-INF/employees-list.jsp").forward(request, response);
-        dataAccess.closeConnection();
+        request.setAttribute(ATTRIBUT_EMPLOYEES, dataAccess.getEmployes(prop.getProperty(PROPERTIES_SQL_ALL_EMPLOYEES)));
+        this.getServletContext().getRequestDispatcher(PAGE_EMPLOYEES_LIST).forward(request, response);
         
+        dataAccess.closeConnection();
     }
     
+    //TODO
     private void add(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Properties prop= this.initProperty(request);
-        HttpSession session=request.getSession(true);
+        DataAccess dataAccess=getDataAccess(prop);
         
-        DataAccess dataAccess=new DataAccess(prop.getProperty("dbUrl"),prop.getProperty("dbUser"),prop.getProperty("dbPassword"));
-        
-        if(dataAccess.delete(prop.getProperty("SQL_DELETE_EMPLOYEES"),request.getParameter("employes-id"))){
-            session.setAttribute("message_erreur","");
-            session.setAttribute("message_info","Succès de l'ajout");
-            
-            session.setAttribute("employes", dataAccess.getEmployes(prop.getProperty("SQL_ALL_EMPLOYEES")));
+        if(dataAccess.delete(prop.getProperty(PROPERTIES_SQL_DELETE_EMPLOYEES),request.getParameter("employes-id"))){
+            request.setAttribute(ATTRIBUT_MESSAGE_INFO,"Succès de l'ajout");
+            request.setAttribute(ATTRIBUT_EMPLOYEES, dataAccess.getEmployes(prop.getProperty(PROPERTIES_SQL_ALL_EMPLOYEES)));
         }
         else{
-            session.setAttribute("message_erreur","Echec de l'ajout");
-            session.setAttribute("message_info","");
+            request.setAttribute(ATTRIBUT_MESSAGE_ERROR,"Echec de l'ajout");
         }
-        this.getServletContext().getRequestDispatcher("/WEB-INF/new-employee.jsp").forward(request, response);
+        this.getServletContext().getRequestDispatcher(PAGE_NEW_EMPLOYE).forward(request, response);
         dataAccess.closeConnection();
     }
 
     private void details(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Properties prop= this.initProperty(request);
-        HttpSession session=request.getSession(true);
+        DataAccess dataAccess=getDataAccess(prop);
         
-        DataAccess dataAccess=new DataAccess(prop.getProperty("dbUrl"),prop.getProperty("dbUser"),prop.getProperty("dbPassword"));
-        Employes employes =dataAccess.getEmployes(prop.getProperty("SQL_DETAILS_EMPLOYES"),request.getParameter("employes-id"));
-        if(employes !=null){
-            session.setAttribute("message_erreur","");
-            session.setAttribute("message_info","");
-            session.setAttribute("employe",employes);
-            this.getServletContext().getRequestDispatcher("/WEB-INF/details.jsp").forward(request, response);
+        Employes employee =dataAccess.getEmployes(prop.getProperty(PROPERTIES_SQL_DETAILS_EMPLOYEES),request.getParameter("employes-id"));
+        
+        if(employee !=null){
+            request.setAttribute(ATTRIBUT_EMPLOYEE,employee);
+            this.getServletContext().getRequestDispatcher(PAGE_DETAILS).forward(request, response);
         }
         else{
-            session.setAttribute("message_erreur","Erreur de la connexion à la base de donnée");
-            session.setAttribute("message_info","");
-        this.getServletContext().getRequestDispatcher("/WEB-INF/employees-list.jsp").forward(request, response);
+            request.setAttribute(ATTRIBUT_MESSAGE_ERROR,"Erreur de la connexion à la base de donnée");
+            request.setAttribute(ATTRIBUT_EMPLOYEES, dataAccess.getEmployes(prop.getProperty(PROPERTIES_SQL_ALL_EMPLOYEES)));
+            this.getServletContext().getRequestDispatcher(PAGE_EMPLOYEES_LIST).forward(request, response);
         }
         dataAccess.closeConnection();
     }
     
     private void update(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Properties prop= this.initProperty(request);
-        HttpSession session=request.getSession(true);
+        DataAccess dataAccess=getDataAccess(prop);
         
-        DataAccess dataAccess=new DataAccess(prop.getProperty("dbUrl"),prop.getProperty("dbUser"),prop.getProperty("dbPassword"));
-        Employes employes=new Employes();
-        employes.setId(Integer.parseInt(request.getParameter("employes-id")));
-        employes.setNom(request.getParameter("employes-nom"));
-        employes.setPrenom(request.getParameter("employes-prenom"));
-        employes.setEmail(request.getParameter("employes-email"));
-        employes.setTeldom(request.getParameter("employes-teldom"));
-        employes.setTelport(request.getParameter("employes-telport"));
-        employes.setTelpro(request.getParameter("employes-telperso"));
-        employes.setAdresse(request.getParameter("employes-adresse"));
-        employes.setVille(request.getParameter("employes-ville"));
-        employes.setCodepostal(request.getParameter("employes-codepostal"));
+        Employes employee=new Employes();
+        employee.setId(Integer.parseInt(request.getParameter("employes-id")));
+        employee.setNom(request.getParameter("employes-nom"));
+        employee.setPrenom(request.getParameter("employes-prenom"));
+        employee.setEmail(request.getParameter("employes-email"));
+        employee.setTeldom(request.getParameter("employes-teldom"));
+        employee.setTelport(request.getParameter("employes-telport"));
+        employee.setTelpro(request.getParameter("employes-telperso"));
+        employee.setAdresse(request.getParameter("employes-adresse"));
+        employee.setVille(request.getParameter("employes-ville"));
+        employee.setCodepostal(request.getParameter("employes-codepostal"));
         
-        if(dataAccess.updateEmployes(prop.getProperty("SQL_UPDATE_EMPLOYES"),employes)){
-            session.setAttribute("message_erreur","Succes de la mise à jour");
-            session.setAttribute("message_info","");
-        this.getServletContext().getRequestDispatcher("/WEB-INF/details.jsp").forward(request, response);
+        if(dataAccess.updateEmployes(prop.getProperty(PROPERTIES_SQL_UPDATE_EMPLOYEES),employee)){
+            request.setAttribute(ATTRIBUT_MESSAGE_INFO,"Succes de la mise à jour");
+        this.getServletContext().getRequestDispatcher(PAGE_DETAILS).forward(request, response);
         }
         else{
-            session.setAttribute("message_erreur","Erreur dans la mise à jour");
-            session.setAttribute("message_info","");
-        this.getServletContext().getRequestDispatcher("/WEB-INF/details.jsp").forward(request, response);
+            request.setAttribute(ATTRIBUT_MESSAGE_ERROR,"Erreur dans la mise à jour");
+        this.getServletContext().getRequestDispatcher(PAGE_DETAILS).forward(request, response);
         }
         dataAccess.closeConnection();
     }

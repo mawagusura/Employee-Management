@@ -13,11 +13,11 @@
         <div class="d-block mx-auto login-card">
             <h3 class="text-primary">Connexion</h3>
             <!-- message -->
-            <c:if test="${sessionScope.message_erreur != null}"> 
+            <c:if test="${sessionScope.message_error != null}"> 
                 <p class="text-danger">
-                    <c:out value="${message_erreur}"  default=""/>
+                    <c:out value="${message_error}"  default=""/>
                 </p>
-                <c:remove var="message_erreur" scope="session"/>
+                <c:remove var="message_error" scope="session"/>
             </c:if>
             <div class="card border-secondary mb-3" style="max-width: 20rem;">
                 <div class="card-header">Login</div>

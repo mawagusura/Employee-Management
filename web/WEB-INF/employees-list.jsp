@@ -14,11 +14,23 @@
         <form action="${pageContext.request.contextPath}" method="post">
             <legend class="m-2"><b>Liste des employés</b></legend>
             
-            <p class="text-danger m-2">${message_erreur}</p>
-            <p class="text-primary m-2">${message_info}</p>
             
+            <c:if test="${sessionScope.message_error != null}"> 
+                <p class="text-danger m-2">
+                    <c:out value="${message_error}"  default=""/>
+                </p>
+                <c:remove var="message_error" scope="session"/>
+            </c:if>
+                
+                <c:if test="${sessionScope.message_info != null}"> 
+                <p class="text-primary m-2">
+                    <c:out value="${message_info}"  default=""/>
+                </p>
+                <c:remove var="message_info" scope="session"/>
+            </c:if>
+                
             <c:choose>
-                <c:when test="${ employes.size() == 0 }">
+                <c:when test="${ employees.size() == 0 }">
                     <p class="text-danger m-2">Nous devons recruter !</p>
                 </c:when>
                 <c:otherwise>
@@ -38,18 +50,18 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <c:forEach items="${ employes }" var="employe" >
+                            <c:forEach items="${ employees }" var="employee" >
                                 <tr>
-                                    <th scope="row"><input type="radio" name="employes-id" value="${employe.id}" id="employee_${employe.id}"></th>
-                                    <td><c:out value="${employe.nom}"/></td>
-                                    <td><c:out value="${employe.prenom}"/></td>
-                                    <td><c:out value="${employe.teldom}"/></td>
-                                    <td><c:out value="${employe.telport}"/></td>
-                                    <td><c:out value="${employe.telpro}"/></td>
-                                    <td><c:out value="${employe.adresse}"/></td>
-                                    <td><c:out value="${employe.codepostal}"/></td>
-                                    <td><c:out value="${employe.ville}"/></td>
-                                    <td><c:out value="${employe.email}"/></td>
+                                    <th scope="row"><input type="radio" name="employes-id" value="${employee.id}" id="employee_${employee.id}"></th>
+                                    <td><c:out value="${employee.nom}"/></td>
+                                    <td><c:out value="${employee.prenom}"/></td>
+                                    <td><c:out value="${employee.teldom}"/></td>
+                                    <td><c:out value="${employee.telport}"/></td>
+                                    <td><c:out value="${employee.telpro}"/></td>
+                                    <td><c:out value="${employee.adresse}"/></td>
+                                    <td><c:out value="${employee.codepostal}"/></td>
+                                    <td><c:out value="${employee.ville}"/></td>
+                                    <td><c:out value="${employee.email}"/></td>
                                 </tr>
                             </c:forEach>
                         </tbody>

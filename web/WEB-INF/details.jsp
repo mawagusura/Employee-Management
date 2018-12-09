@@ -10,38 +10,53 @@
     <body>
         <div class="d-block mx-auto details-form">
             <form action="${pageContext.request.contextPath}" method="post">
-                <input type="hidden" class="form-control" id="employes-id" name="employes-id" value="${employe.id}">
                 
-                <legend>Détails du membre ${employe.prenom} ${employe.nom}</legend>
+                <c:if test="${sessionScope.message_error != null}"> 
+                    <p class="text-danger m-2">
+                        <c:out value="${message_error}"  default=""/>
+                    </p>
+                    <c:remove var="message_error" scope="session"/>
+                </c:if>
+
+                <c:if test="${sessionScope.message_info != null}"> 
+                    <p class="text-primary m-2">
+                        <c:out value="${message_info}"  default=""/>
+                    </p>
+                    <c:remove var="message_info" scope="session"/>
+                </c:if>
+                
+                <input type="hidden" class="form-control" id="employes-id" name="employes-id" value="${employee.id}">
+                
+                <legend>Détails du membre ${employee.prenom} ${employee.nom}</legend>
                 <hr>
                 <div class="form-group row">
                     <label for="name" class="col-sm-2 col-form-label">Nom</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" id="name" name="employes-nom" value="${employe.nom}">
+                        <input type="text" class="form-control" id="name" name="employes-nom" value="${employee.nom}">
                     </div>
                 </div>
                 <div class="form-group row">
                     <label for="first-name" class="col-sm-2 col-form-label">Prénom</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" id="first-name" name="employes-prenom" value="${employe.prenom}">
+                        <input type="text" class="form-control" id="first-name" name="employes-prenom" value="${employee.prenom}">
                     </div>
                 </div>
                 <div class="form-group row">
                     <label for="fixed-phone" class="col-sm-2 col-form-label">Tél dom</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" id="fixed-phone" name="employes-teldom" value="${employe.teldom}">
+                        <input type="text" class="form-control" id="fixed-phone" name="employes-teldom" value="${employee.teldom}">
                     </div>
                 </div>
                 <div class="form-group row">
                     <label for="mobile-phone" class="col-sm-2 col-form-label">Tél mob</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" id="mobile-phone" name="employes-telperso"value="${employe.telport}">
+                        <input type="text" class="form-control" id="mobile-phone" name="employes-telperso"value="${employee.telport}">
                     </div>
                 </div>
                 <div class="form-group row">
                     <label for="pro-phone" class="col-sm-2 col-form-label">Tél pro</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" id="pro-phone" name="employes-telport" value="${employe.telpro}">
+                        <input type="text" class="form-control" id="pro-phone" name="employes-telport" value="${employee.telpro}">
                     </div>
                 </div>
 
@@ -50,7 +65,7 @@
                         <div class="form-group row">
                             <label for="address" class="col-sm-4 col-form-label">Adresse</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" id="address" name="employes-adresse" value="${employe.adresse}">
+                                <input type="text" class="form-control" id="address" name="employes-adresse" value="${employee.adresse}">
                             </div>
                         </div>
                     </div>
@@ -58,7 +73,7 @@
                         <div class="form-group row">
                             <label for="postal" class="col-sm-5 col-form-label">Code postal</label>
                             <div class="col-sm-7">
-                                <input type="text" class="form-control" id="postal" name="employes-codepostal" value="${employe.codepostal}">
+                                <input type="text" class="form-control" id="postal" name="employes-codepostal" value="${employee.codepostal}">
                             </div>
                         </div>
                     </div>
@@ -69,7 +84,7 @@
                         <div class="form-group row">
                             <label for="country" class="col-sm-4 col-form-label">Ville</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" id="country" name="employes-ville" value="${employe.ville}">
+                                <input type="text" class="form-control" id="country" name="employes-ville" value="${employee.ville}">
                             </div>
                         </div>
                     </div>
@@ -77,7 +92,7 @@
                         <div class="form-group row">
                             <label for="mail" class="col-sm-5 col-form-label">Email</label>
                             <div class="col-sm-7">
-                                <input type="text" class="form-control" id="mail" name="employes-email" value="${employe.email}">
+                                <input type="text" class="form-control" id="mail" name="employes-email" value="${employee.email}">
                             </div>
                         </div>
                     </div>
