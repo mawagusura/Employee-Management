@@ -16,6 +16,7 @@
         <servlet-name>CRUDController</servlet-name>
         <servlet-class>fr.efrei.Controllers.CRUDController</servlet-class>
     </servlet>
+
     <servlet-mapping>
         <servlet-name>DefautController</servlet-name>
         <url-pattern>/</url-pattern>

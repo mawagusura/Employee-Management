@@ -45,7 +45,6 @@ public class DefautController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        System.out.println("JE SUIS PASSE");
         processRequest(request, response);
     }
 

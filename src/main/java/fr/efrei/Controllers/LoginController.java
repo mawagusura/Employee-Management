@@ -41,7 +41,7 @@ public class LoginController extends HttpServlet {
         if(session.getAttribute("identifiant")!=null){
             response.sendRedirect("http://localhost:8080/employee-management/list");
         }
-        else this.getServletContext().getRequestDispatcher("/WEB-INF/index.jsp").forward(request, response);
+        else this.getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
     }
 
     /**
@@ -67,7 +67,7 @@ public class LoginController extends HttpServlet {
             response.sendRedirect("http://localhost:8080/employee-management/list");
         }
         else{
-            session.setAttribute("message_erreur", "Identifiant ou mot de passe incorrect");
+            request.setAttribute("message_erreur", "Identifiant ou mot de passe incorrect");
             doGet(request, response);
         }
     }

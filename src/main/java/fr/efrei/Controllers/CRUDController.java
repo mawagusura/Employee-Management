@@ -8,6 +8,7 @@ package fr.efrei.Controllers;
 import fr.efrei.DAO.EmployesDAO;
 import fr.efrei.entities.Employes;
 import java.io.IOException;
+import java.util.HashSet;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -35,6 +36,30 @@ public class CRUDController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
+        
+        String action="";
+        if(request.getParameter("action")!=null){
+            action=(String)request.getParameter("action");
+            
+            if(action.equals("details")){        
+                try{
+                    int id =  Integer.parseInt( request.getParameter("employes-id"));
+                    Employes employe = (Employes) this.employesDAO.findOne(id);
+                    if(employe!=null){
+                        request.setAttribute("employe", employe);
+                        this.getServletContext().getRequestDispatcher("/WEB-INF/details.jsp").forward(request, response);
+                    }
+                }
+                catch(NumberFormatException e){
+                    e.printStackTrace();
+                }
+                response.sendRedirect("http://localhost:8080/employee-management/list");
+            }
+            else{
+                this.getServletContext().getRequestDispatcher("/WEB-INF/new-employee.jsp").forward(request, response);
+            }
+        }
+        response.sendRedirect("http://localhost:8080/employee-management/list");
     }
 
     /**
@@ -48,6 +73,8 @@ public class CRUDController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
+        
     }
     
     /**
@@ -68,12 +95,14 @@ public class CRUDController extends HttpServlet {
             Employes e = (Employes) this.employesDAO.findOne(id);
             if(e!=null){
                 this.employesDAO.delete(e);
+                
             }
         }
         catch(NumberFormatException e){
-            // TODO
+            e.printStackTrace();
         }
-        
+        response.sendRedirect("http://localhost:8080/employee-management/list");
+
     }
     
     /**

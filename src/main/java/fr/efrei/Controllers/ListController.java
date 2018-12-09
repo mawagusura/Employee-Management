@@ -37,8 +37,8 @@ public class ListController extends HttpServlet {
 
         HttpSession session=request.getSession(true);
 
-        session.setAttribute("employes", this.employesDAO.findAll() );
-        this.getServletContext().getRequestDispatcher("/WEB-INF/bienvenue.jsp").forward(request, response);
+        request.setAttribute("employes", this.employesDAO.findAll() );
+        this.getServletContext().getRequestDispatcher("/WEB-INF/employees-list.jsp").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

@@ -7,6 +7,7 @@ package fr.efrei.DAO;
 
 import fr.efrei.entities.Identifiant;
 import javax.ejb.Stateless;
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
@@ -25,6 +26,14 @@ public class IdentifiantDAO extends AbstractDAO{
         TypedQuery<Identifiant> q = em.createQuery(
                 "SELECT e FROM Identifiant e WHERE e.login = :login", this.myClass);
         q.setParameter("login", login);
-        return (Identifiant) q.getSingleResult();
+        
+        Identifiant id = null;
+        try{
+            id = (Identifiant) q.getSingleResult();
+        }
+        catch (NoResultException e){
+            e.printStackTrace();
+        }
+        return id;
     }
 }
