@@ -18,7 +18,7 @@ import javax.persistence.Table;
  * @author LUCASMasson
  */
 @Entity
-@Table
+@Table(name="EMPLOYES")
 public class Employes implements Serializable {
     private int id;
     private String nom;

@@ -5,7 +5,6 @@
  */
 package fr.efrei.DAO;
 
-import java.io.Serializable;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -19,7 +18,7 @@ public class AbstractDAO<T> {
     
     protected Class<T> myClass;
     
-    @PersistenceContext
+    @PersistenceContext(unitName = "MySQL-local")
     EntityManager em;
     
     public final void setClass (Class<T> classToSet){
@@ -27,7 +26,7 @@ public class AbstractDAO<T> {
     }
     
     public List<T> findAll(){
-        return em.createQuery("FROM " + myClass.getName()).getResultList();
+        return em.createQuery("SELECT e FROM " + myClass.getName() + " e").getResultList();
     }
     
     public void create( T entity ){

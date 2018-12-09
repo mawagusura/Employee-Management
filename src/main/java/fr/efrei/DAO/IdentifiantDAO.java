@@ -6,12 +6,15 @@
 package fr.efrei.DAO;
 
 import fr.efrei.entities.Identifiant;
+import javax.ejb.Stateless;
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 
 /**
  *
  * @author Amaury
  */
+@Stateless
 public class IdentifiantDAO extends AbstractDAO{
     
     public IdentifiantDAO(){
@@ -19,9 +22,9 @@ public class IdentifiantDAO extends AbstractDAO{
     }
     
     public Identifiant findByLogin(String login){
-        Query q = em.createQuery(
-                "SELECT * FROM " + myClass.getName() + " e WHERE login = :login");
+        TypedQuery<Identifiant> q = em.createQuery(
+                "SELECT e FROM Identifiant e WHERE e.login = :login", this.myClass);
         q.setParameter("login", login);
-        return (Identifiant) q.getResultList();
+        return (Identifiant) q.getSingleResult();
     }
 }

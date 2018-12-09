@@ -17,19 +17,21 @@ import javax.persistence.Table;
  * @author LUCASMasson
  */
 @Entity
-@Table
+@Table(name= "IDENTIFIANT")
 public class Identifiant implements Serializable {
     
     private String login="";
-    private String pwd="";
+    private String password="";
+    
+    @Id
+    @GeneratedValue
     private int id;
     
     public Identifiant(){
         
     }
     
-    @Id
-    @GeneratedValue
+
     public int getId(){
         return this.id;
     }
@@ -38,8 +40,6 @@ public class Identifiant implements Serializable {
         this.id = id;
     }
     
-    
-    @Column
     public String getLogin(){
         return login;
     }
@@ -48,12 +48,11 @@ public class Identifiant implements Serializable {
         this.login=login;
     }
     
-    @Column
-    public String getPwd(){
-        return pwd;
+    public String getPassword(){
+        return password;
     }
     
-    public void setPwd(String password){
-        this.pwd=password;
+    public void setPassword(String password){
+        this.password=password;
     }
 }

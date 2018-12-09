@@ -16,7 +16,7 @@
         <h1>Bienvenue</h1>
         Votre login est: <c:out value="${sessionScope.identifiant.login}" default=""/> 
         <br><br>
-        Votre mot de passe  est: <c:out value="${sessionScope.identifiant.pwd}" default=""/> 
+        Votre mot de passe  est: <c:out value="${sessionScope.identifiant.password}" default=""/> 
         <br><br>
         <table border="1">
                 <tbody><tr>

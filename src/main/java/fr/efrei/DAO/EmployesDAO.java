@@ -6,11 +6,13 @@
 package fr.efrei.DAO;
 
 import fr.efrei.entities.Employes;
+import javax.ejb.Stateless;
 
 /**
  *
  * @author Amaury
  */
+@Stateless
 public class EmployesDAO extends AbstractDAO{
     
     public EmployesDAO(){

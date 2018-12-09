@@ -21,7 +21,7 @@ import javax.servlet.http.HttpSession;
  */
 public class LoginController extends HttpServlet {
 
-    @EJB
+    @EJB(name="identifiantDAO")
     IdentifiantDAO identifiantDAO;
     
     /**
@@ -60,9 +60,9 @@ public class LoginController extends HttpServlet {
         String login=request.getParameter("chLogin");
         String password=request.getParameter("chPassword");
 
-        Identifiant id = this.identifiantDAO.findByLogin(login);
+        Identifiant id = (Identifiant) this.identifiantDAO.findByLogin(login);
 
-        if(id!=null && password.equals(id.getPwd())){
+        if(id!=null && password.equals(id.getPassword())){
             session.setAttribute("identifiant", id);
             response.sendRedirect("http://localhost:8080/employee-management/list");
         }
