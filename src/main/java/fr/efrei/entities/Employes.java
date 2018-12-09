@@ -5,16 +5,28 @@
  */
 package fr.efrei.entities;
 
+import java.io.Serializable;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+
 /**
  *
  * @author LUCASMasson
  */
-public class Employes {
+@Entity
+@Table
+public class Employes implements Serializable {
     private int id;
     private String nom;
     private String prenom;
     private String teldom;
 
+    @Id
+    @GeneratedValue
     public int getId() {
         return id;
     }
@@ -23,6 +35,7 @@ public class Employes {
         this.id = id;
     }
 
+    @Column
     public String getNom() {
         return nom;
     }
@@ -31,6 +44,7 @@ public class Employes {
         this.nom = nom;
     }
 
+    @Column
     public String getPrenom() {
         return prenom;
     }
@@ -39,6 +53,7 @@ public class Employes {
         this.prenom = prenom;
     }
 
+    @Column
     public String getTeldom() {
         return teldom;
     }
@@ -47,6 +62,7 @@ public class Employes {
         this.teldom = teldom;
     }
 
+    @Column
     public String getTelport() {
         return telport;
     }
@@ -55,6 +71,7 @@ public class Employes {
         this.telport = telport;
     }
 
+    @Column
     public String getTelpro() {
         return telpro;
     }
@@ -63,6 +80,7 @@ public class Employes {
         this.telpro = telpro;
     }
 
+    @Column
     public String getAdresse() {
         return adresse;
     }
@@ -71,6 +89,7 @@ public class Employes {
         this.adresse = adresse;
     }
 
+    @Column
     public String getCodepostal() {
         return codepostal;
     }
@@ -79,6 +98,7 @@ public class Employes {
         this.codepostal = codepostal;
     }
 
+    @Column
     public String getVille() {
         return ville;
     }
@@ -87,6 +107,7 @@ public class Employes {
         this.ville = ville;
     }
 
+    @Column
     public String getEmail() {
         return email;
     }

@@ -5,11 +5,10 @@
  */
 package fr.efrei.Controllers;
 
-import fr.efrei.DataAccess;
+import fr.efrei.DAO.IdentifiantDAO;
 import fr.efrei.entities.Identifiant;
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.Properties;
+import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -22,6 +21,9 @@ import javax.servlet.http.HttpSession;
  */
 public class LoginController extends HttpServlet {
 
+    @EJB
+    IdentifiantDAO identifiantDAO;
+    
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -39,7 +41,7 @@ public class LoginController extends HttpServlet {
         if(session.getAttribute("identifiant")!=null){
             response.sendRedirect("http://localhost:8080/employee-management/list");
         }
-        else    this.getServletContext().getRequestDispatcher("/WEB-INF/index.jsp").forward(request, response);
+        else this.getServletContext().getRequestDispatcher("/WEB-INF/index.jsp").forward(request, response);
     }
 
     /**
@@ -57,15 +59,10 @@ public class LoginController extends HttpServlet {
         
         String login=request.getParameter("chLogin");
         String password=request.getParameter("chPassword");
-        
-        Properties prop= new Properties();
-        InputStream input= request.getServletContext().getResourceAsStream("/WEB-INF/db.properties");
-        prop.load(input);
 
-        DataAccess dataAccess=new DataAccess(prop.getProperty("dbUrl"),prop.getProperty("dbUser"),prop.getProperty("dbPassword"));
-        Identifiant id = dataAccess.getIdentifiant(prop.getProperty("SQL_LOGIN_PREPARED"),login,password);
+        Identifiant id = this.identifiantDAO.findByLogin(login);
 
-        if(id!=null){
+        if(id!=null && password.equals(id.getPwd())){
             session.setAttribute("identifiant", id);
             response.sendRedirect("http://localhost:8080/employee-management/list");
         }
@@ -73,7 +70,6 @@ public class LoginController extends HttpServlet {
             session.setAttribute("message_erreur", "Identifiant ou mot de passe incorrect");
             doGet(request, response);
         }
-        dataAccess.closeConnection();
     }
     
     /**
@@ -83,7 +79,7 @@ public class LoginController extends HttpServlet {
      */
     @Override
     public String getServletInfo() {
-        return "Short description";
+        return "Login Servlet";
     }
 }
 

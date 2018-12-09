@@ -5,11 +5,9 @@
  */
 package fr.efrei.Controllers;
 
-import fr.efrei.DataAccess;
+import fr.efrei.DAO.EmployesDAO;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.PrintWriter;
-import java.util.Properties;
+import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -22,6 +20,9 @@ import javax.servlet.http.HttpSession;
  */
 public class ListController extends HttpServlet {
 
+    @EJB
+    EmployesDAO employesDAO;
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -36,13 +37,7 @@ public class ListController extends HttpServlet {
 
         HttpSession session=request.getSession(true);
 
-        Properties prop= new Properties();
-        InputStream input= request.getServletContext().getResourceAsStream("/WEB-INF/db.properties");
-        prop.load(input);
-
-        DataAccess dataAccess=new DataAccess(prop.getProperty("dbUrl"),prop.getProperty("dbUser"),prop.getProperty("dbPassword"));
-
-        session.setAttribute("employes", dataAccess.getEmployes(prop.getProperty("SQL_ALL_EMPLOYEES")));
+        session.setAttribute("employes", this.employesDAO.findAll() );
         this.getServletContext().getRequestDispatcher("/WEB-INF/bienvenue.jsp").forward(request, response);
     }
 

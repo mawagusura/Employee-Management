@@ -5,11 +5,10 @@
  */
 package fr.efrei.Controllers;
 
-import fr.efrei.DataAccess;
+import fr.efrei.DAO.EmployesDAO;
+import fr.efrei.entities.Employes;
 import java.io.IOException;
-import java.io.InputStream;
-import java.text.ParseException;
-import java.util.Properties;
+import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -21,6 +20,9 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class CRUDController extends HttpServlet {
 
+    @EJB
+    EmployesDAO employesDAO;
+    
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -60,20 +62,18 @@ public class CRUDController extends HttpServlet {
     public void doDelete(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
+        
         try{
             int id =  Integer.parseInt( request.getParameter("employes-id"));
+            Employes e = (Employes) this.employesDAO.findOne(id);
+            if(e!=null){
+                this.employesDAO.delete(e);
+            }
         }
         catch(NumberFormatException e){
             // TODO
         }
         
-        Properties prop= new Properties();
-        InputStream input= request.getServletContext().getResourceAsStream("/WEB-INF/db.properties");
-        prop.load(input);
-
-        
-        DataAccess dataAccess=new DataAccess(prop.getProperty("dbUrl"),prop.getProperty("dbUser"),prop.getProperty("dbPassword"));
-        //dataAccess.getEmploye()
     }
     
     /**
