@@ -23,12 +23,33 @@ import java.util.logging.Logger;
  */
 public class DataAccess {
         
-    private Connection connection;
+    private static final String DRIVER="com.mysql.jdbc.Driver";
     
+    private static final String EMPLOYES_ID="ID";
+    private static final String EMPLOYES_NOM="NOM";
+    private static final String EMPLOYES_PRENOM="PRENOM";
+    private static final String EMPLOYES_TELDOM="TELDOM";
+    private static final String EMPLOYES_TELPRO="TELPRO";
+    private static final String EMPLOYES_TELPORT="TELPORT";
+    private static final String EMPLOYES_ADRESSE="ADRESSE";
+    private static final String EMPLOYES_VILLE="VILLE";
+    private static final String EMPLOYES_CODEPOSTAL="CODEPOSTAL";
+    private static final String EMPLOYES_EMAIL="EMAIL";
     
+    private static final String IDENTIFIANT_LOGIN="LOGIN";
+    private static final String IDENTIFIANT_PASSWORD="PASSWORD";        
+    
+    private Connection connection;    
+    
+    /**
+     * Constructor of DataAccess, and create a DB connection based on parameters
+     * @param url
+     * @param user
+     * @param password 
+     */
     public DataAccess(String url, String user,String password){
         try{
-            Class.forName("com.mysql.jdbc.Driver").newInstance();
+            Class.forName(DRIVER).newInstance();
             this.connection = DriverManager.getConnection(url,user,password);
         }
         catch(SQLException | ClassNotFoundException | InstantiationException | IllegalAccessException ex){
@@ -36,28 +57,32 @@ public class DataAccess {
         }
     }
     
-    
+    /**
+     * Execute a statement to query employes based on the sql given in paramerter
+     * @param sql
+     * @return 
+     */
     public List<Employes> getEmployes(String sql) {
-        List<Employes> listEmployes=new ArrayList<Employes>();
+        List<Employes> listEmployes=new ArrayList<>();
         try{
             Statement stm = connection.createStatement();
-            ResultSet rs=stm.executeQuery(sql);
-            Employes employes;
-            while(rs.next()){
-                employes=new Employes();
-                employes.setId(rs.getInt("ID"));
-                employes.setNom(rs.getString("NOM"));
-                employes.setPrenom(rs.getString("PRENOM"));
-                employes.setTeldom(rs.getString("TELDOM"));
-                employes.setTelport(rs.getString("TELPORT"));
-                employes.setTelpro(rs.getString("TELPRO"));
-                employes.setAdresse(rs.getString("ADRESSE"));
-                employes.setCodepostal(rs.getString("CODEPOSTAL"));
-                employes.setVille(rs.getString("VILLE"));
-                employes.setEmail(rs.getString("EMAIL"));
-                listEmployes.add(employes);
+            try (ResultSet rs = stm.executeQuery(sql)) {
+                Employes employes;
+                while(rs.next()){
+                    employes=new Employes();
+                    employes.setId(rs.getInt(EMPLOYES_ID));
+                    employes.setNom(rs.getString(EMPLOYES_NOM));
+                    employes.setPrenom(rs.getString(EMPLOYES_PRENOM));
+                    employes.setTeldom(rs.getString(EMPLOYES_TELDOM));
+                    employes.setTelport(rs.getString(EMPLOYES_TELPORT));
+                    employes.setTelpro(rs.getString(EMPLOYES_TELPRO));
+                    employes.setAdresse(rs.getString(EMPLOYES_ADRESSE));
+                    employes.setCodepostal(rs.getString(EMPLOYES_CODEPOSTAL));
+                    employes.setVille(rs.getString(EMPLOYES_VILLE));
+                    employes.setEmail(rs.getString(EMPLOYES_EMAIL));
+                    listEmployes.add(employes);
+                }
             }
-            rs.close();
         } catch (SQLException ex) {
             Logger.getLogger(DataAccess.class.getName()).log(Level.SEVERE, null, ex);
             return null;
@@ -66,37 +91,52 @@ public class DataAccess {
         return listEmployes;
     }
 
+    /**
+     * Execute a statement to get an identifant based on the sql given in paramerter and a login/ a password
+     * @param sql
+     * @param login
+     * @param pwd
+     * @return 
+     */
     public Identifiant getIdentifiant(String sql,String login, String pwd) {        
         Identifiant id=null;
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, login);
             preparedStatement.setString(2, pwd);
-            ResultSet rs=preparedStatement.executeQuery();
-            
-            while(rs.next()){
-                id= new Identifiant();
-                id.setLogin(rs.getString("LOGIN"));
-                id.setPwd(rs.getString("PASSWORD"));
+            try (ResultSet rs = preparedStatement.executeQuery()) {
+                while(rs.next()){
+                    id= new Identifiant();
+                    id.setLogin(rs.getString(IDENTIFIANT_LOGIN));
+                    id.setPwd(rs.getString(IDENTIFIANT_PASSWORD));
+                }
             }
-            
-            rs.close();
         } catch (SQLException ex) {
             Logger.getLogger(DataAccess.class.getName()).log(Level.SEVERE, null, ex);
         }
         return id;
     }
 
-    
+    /**
+     * Close the connection to the database
+     */
     public void closeConnection() {
      try {
-            this.connection.close();
+         if(!this.connection.isClosed()){
+            this.connection.close();   
+         }
         } catch (SQLException ex) {
             Logger.getLogger(DataAccess.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    public boolean delete(String sql, String id) {
+    /**
+     * Execute a preparedStatement to delete an employee based on his id, and the sql given
+     * @param sql
+     * @param id
+     * @return 
+     */
+    public boolean deleteEmployes(String sql, String id) {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, id);
@@ -108,7 +148,13 @@ public class DataAccess {
         }
     }
 
-    Employes getEmployes(String sql, String id) {
+    /**
+     * Execute a preparedStatement to get an employee based on his id, and the sql given
+     * @param sql
+     * @param id
+     * @return 
+     */
+    public Employes getEmployes(String sql, String id) {
         Employes employes=null;
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
@@ -116,16 +162,16 @@ public class DataAccess {
             ResultSet rs=preparedStatement.executeQuery();
             while(rs.next()){
                 employes=new Employes();
-                employes.setId(rs.getInt("ID"));
-                employes.setNom(rs.getString("NOM"));
-                employes.setPrenom(rs.getString("PRENOM"));
-                employes.setTeldom(rs.getString("TELDOM"));
-                employes.setTelport(rs.getString("TELPORT"));
-                employes.setTelpro(rs.getString("TELPRO"));
-                employes.setAdresse(rs.getString("ADRESSE"));
-                employes.setCodepostal(rs.getString("CODEPOSTAL"));
-                employes.setVille(rs.getString("VILLE"));
-                employes.setEmail(rs.getString("EMAIL"));
+                employes.setId(rs.getInt(EMPLOYES_ID));
+                employes.setNom(rs.getString(EMPLOYES_NOM));
+                employes.setPrenom(rs.getString(EMPLOYES_PRENOM));
+                employes.setTeldom(rs.getString(EMPLOYES_TELDOM));
+                employes.setTelport(rs.getString(EMPLOYES_TELPORT));
+                employes.setTelpro(rs.getString(EMPLOYES_TELPRO));
+                employes.setAdresse(rs.getString(EMPLOYES_ADRESSE));
+                employes.setCodepostal(rs.getString(EMPLOYES_CODEPOSTAL));
+                employes.setVille(rs.getString(EMPLOYES_VILLE));
+                employes.setEmail(rs.getString(EMPLOYES_EMAIL));
             }
             
             return employes;
@@ -135,18 +181,50 @@ public class DataAccess {
         }
     }
 
-    boolean updateEmployes(String sql, Employes employes) {
-        try {PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setString(1, employes.getNom());
-            preparedStatement.setString(2, employes.getPrenom());
-            preparedStatement.setString(3, employes.getTeldom());
-            preparedStatement.setString(4, employes.getTelport());
-            preparedStatement.setString(5, employes.getTelpro());
-            preparedStatement.setString(6, employes.getAdresse());
-            preparedStatement.setString(7, employes.getCodepostal());
-            preparedStatement.setString(8, employes.getVille());
-            preparedStatement.setString(9, employes.getEmail());
-            preparedStatement.setInt(10, employes.getId());
+    /**
+     * Execute a preparedStatement to update an employee based on his id, and the sql given
+     * @param sql
+     * @param employee
+     * @return 
+     */
+    public boolean updateEmployes(String sql, Employes employee) {
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, employee.getNom());
+            preparedStatement.setString(2, employee.getPrenom());
+            preparedStatement.setString(3, employee.getTeldom());
+            preparedStatement.setString(4, employee.getTelport());
+            preparedStatement.setString(5, employee.getTelpro());
+            preparedStatement.setString(6, employee.getAdresse());
+            preparedStatement.setString(7, employee.getCodepostal());
+            preparedStatement.setString(8, employee.getVille());
+            preparedStatement.setString(9, employee.getEmail());
+            preparedStatement.setInt(10, employee.getId());
+            return true;
+        } catch (SQLException ex) {
+            Logger.getLogger(DataAccess.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
+    }
+
+    /**
+     * Execute a preparedStatement to create an new employee based on his id, and the sql given
+     * @param sql
+     * @param employee
+     * @return 
+     */
+    public boolean insertEmployes(String sql, Employes employee) {
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, employee.getNom());
+            preparedStatement.setString(2, employee.getPrenom());
+            preparedStatement.setString(3, employee.getTeldom());
+            preparedStatement.setString(4, employee.getTelport());
+            preparedStatement.setString(5, employee.getTelpro());
+            preparedStatement.setString(6, employee.getAdresse());
+            preparedStatement.setString(7, employee.getCodepostal());
+            preparedStatement.setString(8, employee.getVille());
+            preparedStatement.setString(9, employee.getEmail());
             return true;
         } catch (SQLException ex) {
             Logger.getLogger(DataAccess.class.getName()).log(Level.SEVERE, null, ex);
