@@ -9,6 +9,7 @@ import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -20,13 +21,15 @@ import javax.persistence.Table;
 @Entity
 @Table(name="EMPLOYES")
 public class Employes implements Serializable {
+    
+    @Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private int id;
     private String nom;
     private String prenom;
     private String teldom;
 
-    @Id
-    @GeneratedValue
+
     public int getId() {
         return id;
     }
@@ -35,7 +38,6 @@ public class Employes implements Serializable {
         this.id = id;
     }
 
-    @Column
     public String getNom() {
         return nom;
     }
@@ -44,7 +46,6 @@ public class Employes implements Serializable {
         this.nom = nom;
     }
 
-    @Column
     public String getPrenom() {
         return prenom;
     }
@@ -53,7 +54,6 @@ public class Employes implements Serializable {
         this.prenom = prenom;
     }
 
-    @Column
     public String getTeldom() {
         return teldom;
     }
@@ -62,7 +62,6 @@ public class Employes implements Serializable {
         this.teldom = teldom;
     }
 
-    @Column
     public String getTelport() {
         return telport;
     }
@@ -71,7 +70,6 @@ public class Employes implements Serializable {
         this.telport = telport;
     }
 
-    @Column
     public String getTelpro() {
         return telpro;
     }
@@ -80,7 +78,6 @@ public class Employes implements Serializable {
         this.telpro = telpro;
     }
 
-    @Column
     public String getAdresse() {
         return adresse;
     }
@@ -89,7 +86,6 @@ public class Employes implements Serializable {
         this.adresse = adresse;
     }
 
-    @Column
     public String getCodepostal() {
         return codepostal;
     }
@@ -98,7 +94,6 @@ public class Employes implements Serializable {
         this.codepostal = codepostal;
     }
 
-    @Column
     public String getVille() {
         return ville;
     }
@@ -107,7 +102,6 @@ public class Employes implements Serializable {
         this.ville = ville;
     }
 
-    @Column
     public String getEmail() {
         return email;
     }

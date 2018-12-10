@@ -37,8 +37,8 @@ public class CRUDController extends HttpServlet {
             throws ServletException, IOException {
         
         
-        String action="";
-        if(request.getParameter("action")!=null){
+        String action=request.getParameter("action");
+        if(action!=null){
             action=(String)request.getParameter("action");
             
             if(action.equals("details")){        
@@ -74,7 +74,20 @@ public class CRUDController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
+        Employes newE = new Employes();
         
+        newE.setNom(request.getParameter("employes-nom"));
+        newE.setPrenom(request.getParameter("employes-prenom"));
+        newE.setAdresse(request.getParameter("employes-adresse"));
+        newE.setCodepostal(request.getParameter("employes-codepostal"));
+        newE.setEmail(request.getParameter("employes-email"));
+        newE.setTeldom(request.getParameter("employes-teldom"));
+        newE.setTelport(request.getParameter("employes-telperso"));
+        newE.setTelpro(request.getParameter("employes-telport"));
+        newE.setVille(request.getParameter("employes-ville"));
+        
+        this.employesDAO.create(newE);
+        response.sendRedirect("http://localhost:8080/employee-management/list");
     }
     
     /**

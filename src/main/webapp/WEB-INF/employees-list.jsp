@@ -57,10 +57,10 @@
                 </c:otherwise>
             </c:choose>
             
-            <button type="submit" name="action" value="delete" class="btn btn-primary ml-1" formmethod="delete">Supprimer</button>
+            <button type="submit" name="action" value="delete" class="btn btn-primary ml-1" formmethod="delete" >Supprimer</button>
             <button type="submit" name="action" value="details" class="btn btn-primary ml-1" formmethod="get">Détails</button>
             
-            <button type="submit" name="action" value="add" class="btn ml-1" formmethod="get" formaction="${pageContext.request.contextPath}/new">Ajouter</button>
+            <button type="submit" name="action" value="add" class="btn ml-1" formmethod="get" >Ajouter</button>
         </form>
     </body>
 </html>
