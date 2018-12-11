@@ -9,6 +9,15 @@
         <url-pattern>/</url-pattern>
     </servlet-mapping>
     
+    <servlet>
+        <servlet-name>DefaultServlet</servlet-name>
+        <servlet-class>org.apache.catalina.servlets.DefaultServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DefaultServlet</servlet-name>
+        <url-pattern>/resources/*</url-pattern>
+    </servlet-mapping>
+    
     <session-config>
         <session-timeout>
             30
