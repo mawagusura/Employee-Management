@@ -3,8 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package fr.efrei;
+package fr.efrei.controller;
 
+import fr.efrei.entities.Employes;
+import fr.efrei.entities.Identifiant;
+import fr.efrei.model.DataAccess;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
@@ -239,22 +242,23 @@ public class Controller extends HttpServlet {
             request.setAttribute(ATTRIBUT_MESSAGE_ERROR,MESSAGE_LOGIN_ERROR_EMPTY);
             this.getServletContext().getRequestDispatcher(PAGE_LOGIN).forward(request, response);
         }
-        
-        Properties prop= this.initProperty(request);
-            
-        DataAccess dataAccess=getDataAccess(prop);
-        Identifiant id = dataAccess.getIdentifiant(prop.getProperty(PROPERTIES_SQL_LOGIN),login,password);
-            
-        if(id!=null){
-            session.setAttribute(ATTRIBUT_IDENTIFIANT, id);
-            request.setAttribute(ATTRIBUT_EMPLOYEES, dataAccess.getEmployes(prop.getProperty(PROPERTIES_SQL_ALL_EMPLOYEES)));
-            this.getServletContext().getRequestDispatcher(PAGE_EMPLOYEES_LIST).forward(request, response);
-        }
         else{
-            request.setAttribute(ATTRIBUT_MESSAGE_ERROR,MESSAGE_LOGIN_ERROR);
-            this.getServletContext().getRequestDispatcher(PAGE_LOGIN).forward(request, response);
+            Properties prop= this.initProperty(request);
+
+            DataAccess dataAccess=getDataAccess(prop);
+            Identifiant id = dataAccess.getIdentifiant(prop.getProperty(PROPERTIES_SQL_LOGIN),login,password);
+
+            if(id!=null){
+                session.setAttribute(ATTRIBUT_IDENTIFIANT, id);
+                request.setAttribute(ATTRIBUT_EMPLOYEES, dataAccess.getEmployes(prop.getProperty(PROPERTIES_SQL_ALL_EMPLOYEES)));
+                this.getServletContext().getRequestDispatcher(PAGE_EMPLOYEES_LIST).forward(request, response);
+            }
+            else{
+                request.setAttribute(ATTRIBUT_MESSAGE_ERROR,MESSAGE_LOGIN_ERROR);
+                this.getServletContext().getRequestDispatcher(PAGE_LOGIN).forward(request, response);
+            }
+            dataAccess.closeConnection();
         }
-        dataAccess.closeConnection();
     }
 
     /**
@@ -270,7 +274,7 @@ public class Controller extends HttpServlet {
         DataAccess dataAccess=getDataAccess(prop);
         
         String id=request.getParameter(PARAMETER_EMPLOYES_ID);
-        if(id.equals("")){
+        if(id!=null){
             request.setAttribute(ATTRIBUT_MESSAGE_ERROR,MESSAGE_DELETE_ERROR);
         }
         else{
@@ -335,11 +339,13 @@ public class Controller extends HttpServlet {
         DataAccess dataAccess=getDataAccess(prop);
         
         String id=request.getParameter(PARAMETER_EMPLOYES_ID);
-        if(id.equals("")){
+        if(id==null){
             request.setAttribute(ATTRIBUT_MESSAGE_ERROR,MESSAGE_DETAILS_ERROR_SELECTION);
+            request.setAttribute(ATTRIBUT_EMPLOYEES, dataAccess.getEmployes(prop.getProperty(PROPERTIES_SQL_ALL_EMPLOYEES)));
+            this.getServletContext().getRequestDispatcher(PAGE_EMPLOYEES_LIST).forward(request, response);
         }
         else{
-            Employes employee =dataAccess.getEmployes(prop.getProperty(PROPERTIES_SQL_DETAILS_EMPLOYEES),id);
+            Employes employee = dataAccess.getEmployes(prop.getProperty(PROPERTIES_SQL_DETAILS_EMPLOYEES),id);
             if(employee !=null){
                 request.setAttribute(ATTRIBUT_EMPLOYEE,employee);
                 this.getServletContext().getRequestDispatcher(PAGE_DETAILS).forward(request, response);
@@ -383,7 +389,7 @@ public class Controller extends HttpServlet {
         }
         else{
             request.setAttribute(ATTRIBUT_MESSAGE_ERROR,MESSAGE_UPDATE_ERROR);
-        this.getServletContext().getRequestDispatcher(PAGE_DETAILS).forward(request, response);
+            this.getServletContext().getRequestDispatcher(PAGE_DETAILS).forward(request, response);
         }
         dataAccess.closeConnection();
     }
