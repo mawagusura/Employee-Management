@@ -12,7 +12,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -20,6 +19,9 @@ import javax.servlet.http.HttpSession;
  */
 public class ListController extends HttpServlet {
 
+    private static final String EMPLOYES="employes";
+    private static final String PAGE_EMPLOYEES_LIST="/WEB-INF/employees-list.jsp";
+    
     @EJB
     EmployesDAO employesDAO;
     
@@ -34,11 +36,9 @@ public class ListController extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
-        HttpSession session=request.getSession(true);
-
-        request.setAttribute("employes", this.employesDAO.findAll() );
-        this.getServletContext().getRequestDispatcher("/WEB-INF/employees-list.jsp").forward(request, response);
+        
+        request.setAttribute(EMPLOYES, this.employesDAO.findAll() );
+        this.getServletContext().getRequestDispatcher(PAGE_EMPLOYEES_LIST).forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

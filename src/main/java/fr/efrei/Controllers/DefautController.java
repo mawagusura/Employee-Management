@@ -17,10 +17,14 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class DefautController extends HttpServlet {
 
+    private static final String URL_LOGIN="login";
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
      *
+     * Redirect to the login page
+     * 
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -28,9 +32,7 @@ public class DefautController extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
-        response.sendRedirect("http://localhost:8080/employee-management/login");
-
+        response.sendRedirect(URL_LOGIN);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

@@ -15,6 +15,9 @@ import javax.ejb.Stateless;
 @Stateless
 public class EmployesDAO extends AbstractDAO{
     
+    /**
+     * Specify the class of this DAO by Employes
+     */
     public EmployesDAO(){
         setClass(Employes.class);
     }
