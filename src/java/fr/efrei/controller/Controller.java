@@ -5,8 +5,8 @@
  */
 package fr.efrei.controller;
 
-import fr.efrei.entities.Employes;
-import fr.efrei.entities.Identifiant;
+import fr.efrei.entities.Employee;
+import fr.efrei.entities.Login;
 import fr.efrei.model.DataAccess;
 import java.io.IOException;
 import java.io.InputStream;
@@ -17,10 +17,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-/**
- *
- * @author LUCASMasson
- */
 public class Controller extends HttpServlet {
 
     private static final String PARAMETER_ACTION = "action";
@@ -49,11 +45,11 @@ public class Controller extends HttpServlet {
     private static final String ATTRIBUT_MESSAGE_INFO = "message_info";
     private static final String ATTRIBUT_EMPLOYEES="employees";
     private static final String ATTRIBUT_EMPLOYEE="employee";
+    private static final String ATTRIBUT_NEW_EMPLOYEE="new_employee";
     
     private static final String PAGE_LOGIN="/WEB-INF/login.jsp";
     private static final String PAGE_DETAILS="/WEB-INF/details.jsp";
     private static final String PAGE_EMPLOYEES_LIST="/WEB-INF/employees-list.jsp";
-    private static final String PAGE_NEW_EMPLOYE="/WEB-INF/new-employee.jsp";
     private static final String PAGE_PROPERTIES="/WEB-INF/db.properties";
     private static final String PAGE_LOGOUT="/WEB-INF/logout.jsp";
     
@@ -68,15 +64,15 @@ public class Controller extends HttpServlet {
     private static final String PROPERTIES_DB_PASSWORD="dbPassword";
     
     
-    private static final String MESSAGE_UPDATE_INFO="Succes de la mise à jour";
-    private static final String MESSAGE_UPDATE_ERROR="Erreur dans la mise à jour";
-    private static final String MESSAGE_DETAILS_ERROR="Erreur de la connexion à la base de donnée";
+    private static final String MESSAGE_UPDATE_INFO="Succes de la mise à jour.";
+    private static final String MESSAGE_UPDATE_ERROR="Erreur dans la mise à jour.";
+    private static final String MESSAGE_DETAILS_ERROR="Erreur de la connexion à la base de donnée.";
     private static final String MESSAGE_DETAILS_ERROR_SELECTION="Veuillez selectionner l'employé à  inspecter !";
     private static final String MESSAGE_ADD_INFO="Succès de l'ajout";
     private static final String MESSAGE_ADD_ERROR="Echec de l'ajout";
-    private static final String MESSAGE_LOGIN_ERROR="Echec de la connexion! Vérifiez votre login et/ou mot de passe et essayez à nouveau";
-    private static final String MESSAGE_LOGIN_ERROR_EMPTY="Vous devez renseigner les deux champs";
-    private static final String MESSAGE_DELETE_INFO="La suppression a réussi";
+    private static final String MESSAGE_LOGIN_ERROR="Echec de la connexion! Vérifiez votre login et/ou mot de passe et essayez à nouveau.";
+    private static final String MESSAGE_LOGIN_ERROR_EMPTY="Vous devez renseigner les deux champs.";
+    private static final String MESSAGE_DELETE_INFO="La suppression a réussi.";
     private static final String MESSAGE_DELETE_ERROR="Veuillez selectionner l'employé à supprimer !";
     
     /**
@@ -217,7 +213,7 @@ public class Controller extends HttpServlet {
     private void home(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
         Properties prop= this.initProperty(request);    
         DataAccess dataAccess=getDataAccess(prop);
-        request.setAttribute(ATTRIBUT_EMPLOYEES, dataAccess.getEmployes(prop.getProperty(PROPERTIES_SQL_ALL_EMPLOYEES)));
+        request.setAttribute(ATTRIBUT_EMPLOYEES, dataAccess.getEmployees(prop.getProperty(PROPERTIES_SQL_ALL_EMPLOYEES)));
         this.getServletContext().getRequestDispatcher(PAGE_EMPLOYEES_LIST).forward(request, response);
         
         dataAccess.closeConnection();
@@ -242,23 +238,22 @@ public class Controller extends HttpServlet {
             request.setAttribute(ATTRIBUT_MESSAGE_ERROR,MESSAGE_LOGIN_ERROR_EMPTY);
             this.getServletContext().getRequestDispatcher(PAGE_LOGIN).forward(request, response);
         }
-        else{
-            Properties prop= this.initProperty(request);
-
-            DataAccess dataAccess=getDataAccess(prop);
-            Identifiant id = dataAccess.getIdentifiant(prop.getProperty(PROPERTIES_SQL_LOGIN),login,password);
-
-            if(id!=null){
-                session.setAttribute(ATTRIBUT_IDENTIFIANT, id);
-                request.setAttribute(ATTRIBUT_EMPLOYEES, dataAccess.getEmployes(prop.getProperty(PROPERTIES_SQL_ALL_EMPLOYEES)));
-                this.getServletContext().getRequestDispatcher(PAGE_EMPLOYEES_LIST).forward(request, response);
-            }
-            else{
-                request.setAttribute(ATTRIBUT_MESSAGE_ERROR,MESSAGE_LOGIN_ERROR);
-                this.getServletContext().getRequestDispatcher(PAGE_LOGIN).forward(request, response);
-            }
-            dataAccess.closeConnection();
+        
+        Properties prop= this.initProperty(request);
+            
+        DataAccess dataAccess=getDataAccess(prop);
+        Login id = dataAccess.getLogin(prop.getProperty(PROPERTIES_SQL_LOGIN),login,password);
+            
+        if(id!=null){
+            session.setAttribute(ATTRIBUT_IDENTIFIANT, id);
+            request.setAttribute(ATTRIBUT_EMPLOYEES, dataAccess.getEmployees(prop.getProperty(PROPERTIES_SQL_ALL_EMPLOYEES)));
+            this.getServletContext().getRequestDispatcher(PAGE_EMPLOYEES_LIST).forward(request, response);
         }
+        else{
+            request.setAttribute(ATTRIBUT_MESSAGE_ERROR,MESSAGE_LOGIN_ERROR);
+            this.getServletContext().getRequestDispatcher(PAGE_LOGIN).forward(request, response);
+        }
+        dataAccess.closeConnection();
     }
 
     /**
@@ -274,16 +269,16 @@ public class Controller extends HttpServlet {
         DataAccess dataAccess=getDataAccess(prop);
         
         String id=request.getParameter(PARAMETER_EMPLOYES_ID);
-        if(id!=null){
+        if(id == null){
             request.setAttribute(ATTRIBUT_MESSAGE_ERROR,MESSAGE_DELETE_ERROR);
         }
         else{
 
-            if(dataAccess.deleteEmployes(prop.getProperty(PROPERTIES_SQL_DELETE_EMPLOYEES),id)){
+            if(dataAccess.deleteEmployee(prop.getProperty(PROPERTIES_SQL_DELETE_EMPLOYEES),id)){
                 request.setAttribute(ATTRIBUT_MESSAGE_INFO,MESSAGE_DELETE_INFO);
             }
         }
-        request.setAttribute(ATTRIBUT_EMPLOYEES, dataAccess.getEmployes(prop.getProperty(PROPERTIES_SQL_ALL_EMPLOYEES)));
+        request.setAttribute(ATTRIBUT_EMPLOYEES, dataAccess.getEmployees(prop.getProperty(PROPERTIES_SQL_ALL_EMPLOYEES)));
         this.getServletContext().getRequestDispatcher(PAGE_EMPLOYEES_LIST).forward(request, response);
         
         dataAccess.closeConnection();
@@ -301,7 +296,15 @@ public class Controller extends HttpServlet {
         Properties prop= this.initProperty(request);
         DataAccess dataAccess=getDataAccess(prop);
         
-        Employes employee=new Employes();
+        // For the JSP file (is it a new employee or a update of an existing one ?)
+        request.setAttribute(ATTRIBUT_NEW_EMPLOYEE,true);
+        
+        if(request.getParameter(PARAMETER_EMPLOYES_NOM) == null) {
+            request.setAttribute(ATTRIBUT_EMPLOYEES, dataAccess.getEmployees(prop.getProperty(PROPERTIES_SQL_ALL_EMPLOYEES)));
+            this.getServletContext().getRequestDispatcher(PAGE_DETAILS).forward(request, response);
+        }
+        
+        Employee employee=new Employee();
         employee.setNom(request.getParameter(PARAMETER_EMPLOYES_NOM));
         employee.setPrenom(request.getParameter(PARAMETER_EMPLOYES_PRENOM));
         employee.setEmail(request.getParameter(PARAMETER_EMPLOYES_EMAIL));
@@ -311,17 +314,15 @@ public class Controller extends HttpServlet {
         employee.setAdresse(request.getParameter(PARAMETER_EMPLOYES_ADRESSE));
         employee.setVille(request.getParameter(PARAMETER_EMPLOYES_VILLE));
         employee.setCodepostal(request.getParameter(PARAMETER_EMPLOYES_CODEPOSTAL));
-        dataAccess.insertEmployes(prop.getProperty(PROPERTIES_SQL_INSERT_EMPLOYEES),employee);
         
-        
-        
-        if(dataAccess.insertEmployes(prop.getProperty(PROPERTIES_SQL_INSERT_EMPLOYEES),employee)){
+        if(dataAccess.insertEmployee(prop.getProperty(PROPERTIES_SQL_INSERT_EMPLOYEES),employee)){
+            request.setAttribute(ATTRIBUT_EMPLOYEES, dataAccess.getEmployees(prop.getProperty(PROPERTIES_SQL_ALL_EMPLOYEES)));
             request.setAttribute(ATTRIBUT_MESSAGE_INFO,MESSAGE_ADD_INFO);
             this.getServletContext().getRequestDispatcher(PAGE_EMPLOYEES_LIST).forward(request, response);
         }
         else{
             request.setAttribute(ATTRIBUT_MESSAGE_ERROR,MESSAGE_ADD_ERROR);
-            this.getServletContext().getRequestDispatcher(PAGE_NEW_EMPLOYE).forward(request, response);
+            this.getServletContext().getRequestDispatcher(PAGE_DETAILS).forward(request, response);
         }
         dataAccess.closeConnection();
     }
@@ -338,21 +339,24 @@ public class Controller extends HttpServlet {
         Properties prop= this.initProperty(request);
         DataAccess dataAccess=getDataAccess(prop);
         
+        // For the JSP file (is it a new employee or a update of an existing one ?)
+        request.setAttribute(ATTRIBUT_NEW_EMPLOYEE,false);
+        
         String id=request.getParameter(PARAMETER_EMPLOYES_ID);
-        if(id==null){
+        if(id == null){
             request.setAttribute(ATTRIBUT_MESSAGE_ERROR,MESSAGE_DETAILS_ERROR_SELECTION);
-            request.setAttribute(ATTRIBUT_EMPLOYEES, dataAccess.getEmployes(prop.getProperty(PROPERTIES_SQL_ALL_EMPLOYEES)));
+            request.setAttribute(ATTRIBUT_EMPLOYEES, dataAccess.getEmployees(prop.getProperty(PROPERTIES_SQL_ALL_EMPLOYEES)));
             this.getServletContext().getRequestDispatcher(PAGE_EMPLOYEES_LIST).forward(request, response);
         }
         else{
-            Employes employee = dataAccess.getEmployes(prop.getProperty(PROPERTIES_SQL_DETAILS_EMPLOYEES),id);
+            Employee employee =dataAccess.getEmployee(prop.getProperty(PROPERTIES_SQL_DETAILS_EMPLOYEES),id);
             if(employee !=null){
                 request.setAttribute(ATTRIBUT_EMPLOYEE,employee);
                 this.getServletContext().getRequestDispatcher(PAGE_DETAILS).forward(request, response);
             }
             else{
                 request.setAttribute(ATTRIBUT_MESSAGE_ERROR,MESSAGE_DETAILS_ERROR);
-                request.setAttribute(ATTRIBUT_EMPLOYEES, dataAccess.getEmployes(prop.getProperty(PROPERTIES_SQL_ALL_EMPLOYEES)));
+                request.setAttribute(ATTRIBUT_EMPLOYEES, dataAccess.getEmployees(prop.getProperty(PROPERTIES_SQL_ALL_EMPLOYEES)));
                 this.getServletContext().getRequestDispatcher(PAGE_EMPLOYEES_LIST).forward(request, response);
             }
         }        
@@ -371,7 +375,10 @@ public class Controller extends HttpServlet {
         Properties prop= this.initProperty(request);
         DataAccess dataAccess=getDataAccess(prop);
         
-        Employes employee=new Employes();
+        // For the JSP file (is it a new employee or a update of an existing one ?)
+        request.setAttribute(ATTRIBUT_NEW_EMPLOYEE,false);
+        
+        Employee employee=new Employee();
         employee.setId(Integer.parseInt(request.getParameter(PARAMETER_EMPLOYES_ID)));
         employee.setNom(request.getParameter(PARAMETER_EMPLOYES_NOM));
         employee.setPrenom(request.getParameter(PARAMETER_EMPLOYES_PRENOM));
@@ -383,11 +390,13 @@ public class Controller extends HttpServlet {
         employee.setVille(request.getParameter(PARAMETER_EMPLOYES_VILLE));
         employee.setCodepostal(request.getParameter(PARAMETER_EMPLOYES_CODEPOSTAL));
         
-        if(dataAccess.updateEmployes(prop.getProperty(PROPERTIES_SQL_UPDATE_EMPLOYEES),employee)){
+        if(dataAccess.updateEmployee(prop.getProperty(PROPERTIES_SQL_UPDATE_EMPLOYEES),employee)){
+            request.setAttribute(ATTRIBUT_EMPLOYEE,employee);
             request.setAttribute(ATTRIBUT_MESSAGE_INFO,MESSAGE_UPDATE_INFO);
             this.getServletContext().getRequestDispatcher(PAGE_DETAILS).forward(request, response);
         }
         else{
+            request.setAttribute(ATTRIBUT_EMPLOYEE,employee);
             request.setAttribute(ATTRIBUT_MESSAGE_ERROR,MESSAGE_UPDATE_ERROR);
             this.getServletContext().getRequestDispatcher(PAGE_DETAILS).forward(request, response);
         }

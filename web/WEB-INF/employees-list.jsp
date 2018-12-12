@@ -7,34 +7,25 @@
         <!-- title -->
         <title>Liste des employés</title>
         <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-        <link rel="stylesheet" href="styles.css">
+        <link href="${pageContext.request.contextPath}/resources/styles.css" rel="stylesheet" type="text/css"/>
         <meta charset="utf-8">
     </head>
     <body>
-        <form action="${pageContext.request.contextPath}" method="post">
-            <legend class="m-2"><b>Liste des employés</b></legend>
+        <form action="${pageContext.request.contextPath}" method="post" class="employees-form">
+            <legend class="mt-2"><b>Liste des employés</b></legend>
             
+            <p class="text-danger"><c:out value="${message_error}"/><p>
+            <c:remove var="message_error" scope="session"/>
             
-            <c:if test="${sessionScope.message_error != null}"> 
-                <p class="text-danger m-2">
-                    <c:out value="${message_error}"  default=""/>
-                </p>
-                <c:remove var="message_error" scope="session"/>
-            </c:if>
-                
-                <c:if test="${sessionScope.message_info != null}"> 
-                <p class="text-primary m-2">
-                    <c:out value="${message_info}"  default=""/>
-                </p>
-                <c:remove var="message_info" scope="session"/>
-            </c:if>
+            <p class="text-primary"><c:out value="${message_info}"/></p>
+            <c:remove var="message_info" scope="session"/>
                 
             <c:choose>
                 <c:when test="${ employees.size() == 0 }">
                     <p class="text-danger m-2">Nous devons recruter !</p>
                 </c:when>
                 <c:otherwise>
-                    <table class="table table-striped">
+                    <table class="table table-striped table-bordered">
                         <thead>
                             <tr>
                                 <th scope="col">Sél</th>
@@ -50,6 +41,8 @@
                             </tr>
                         </thead>
                         <tbody>
+                            <!-- Var to ckech by default the first radio button -->
+                            <c:set var = "checked" value = "false"/>
                             <c:forEach items="${ employees }" var="employee" >
                                 <tr>
                                     <th scope="row"><input type="radio" name="employes-id" value="${employee.id}" id="employee_${employee.id}"></th>
@@ -66,13 +59,13 @@
                             </c:forEach>
                         </tbody>
                     </table>
+                    <button type="submit" name="action" value="delete" class="btn btn-primary ml-1">Supprimer</button>
+                    <button type="submit" name="action" value="details" class="btn btn-primary ml-1">Détails</button>
                 </c:otherwise>
             </c:choose>
             
-            <button type="submit" name="action" value="delete" class="btn btn-primary ml-1">Supprimer</button>
-            <button type="submit" name="action" value="details" class="btn btn-primary ml-1">Détails</button>
-            
             <button type="submit" name="action" value="add" class="btn ml-1">Ajouter</button>
+            <button type="submit" name="action" value="logout" class="btn ml-1  btn-danger float-right">Déconnexion</button>
         </form>
     </body>
 </html>

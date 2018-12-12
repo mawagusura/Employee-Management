@@ -5,8 +5,8 @@
  */
 package fr.efrei.model;
 
-import fr.efrei.entities.Employes;
-import fr.efrei.entities.Identifiant;
+import fr.efrei.entities.Employee;
+import fr.efrei.entities.Login;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -60,18 +60,18 @@ public class DataAccess {
     }
     
     /**
-     * Execute a statement to query employes based on the sql given in paramerter
+     * Execute a statement to query employees based on the sql given in paramerter
      * @param sql
      * @return 
      */
-    public List<Employes> getEmployes(String sql) {
-        List<Employes> listEmployes=new ArrayList<>();
+    public List<Employee> getEmployees(String sql) {
+        List<Employee> listEmployes=new ArrayList<>();
         try{
             Statement stm = connection.createStatement();
             try (ResultSet rs = stm.executeQuery(sql)) {
-                Employes employes;
+                Employee employes;
                 while(rs.next()){
-                    employes=new Employes();
+                    employes=new Employee();
                     employes.setId(rs.getInt(EMPLOYES_ID));
                     employes.setNom(rs.getString(EMPLOYES_NOM));
                     employes.setPrenom(rs.getString(EMPLOYES_PRENOM));
@@ -100,15 +100,15 @@ public class DataAccess {
      * @param pwd
      * @return 
      */
-    public Identifiant getIdentifiant(String sql,String login, String pwd) {        
-        Identifiant id=null;
+    public Login getLogin(String sql,String login, String pwd) {        
+        Login id=null;
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, login);
             preparedStatement.setString(2, pwd);
             try (ResultSet rs = preparedStatement.executeQuery()) {
                 while(rs.next()){
-                    id= new Identifiant();
+                    id= new Login();
                     id.setLogin(rs.getString(IDENTIFIANT_LOGIN));
                     id.setPwd(rs.getString(IDENTIFIANT_PASSWORD));
                 }
@@ -138,7 +138,7 @@ public class DataAccess {
      * @param id
      * @return 
      */
-    public boolean deleteEmployes(String sql, String id) {
+    public boolean deleteEmployee(String sql, String id) {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, id);
@@ -156,14 +156,14 @@ public class DataAccess {
      * @param id
      * @return 
      */
-    public Employes getEmployes(String sql, String id) {
-        Employes employes=null;
+    public Employee getEmployee(String sql, String id) {
+        Employee employes=null;
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, id);
             ResultSet rs=preparedStatement.executeQuery();
             while(rs.next()){
-                employes=new Employes();
+                employes=new Employee();
                 employes.setId(rs.getInt(EMPLOYES_ID));
                 employes.setNom(rs.getString(EMPLOYES_NOM));
                 employes.setPrenom(rs.getString(EMPLOYES_PRENOM));
@@ -189,7 +189,7 @@ public class DataAccess {
      * @param employee
      * @return 
      */
-    public boolean updateEmployes(String sql, Employes employee) {
+    public boolean updateEmployee(String sql, Employee employee) {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, employee.getNom());
@@ -202,6 +202,7 @@ public class DataAccess {
             preparedStatement.setString(8, employee.getVille());
             preparedStatement.setString(9, employee.getEmail());
             preparedStatement.setInt(10, employee.getId());
+            preparedStatement.executeUpdate();
             return true;
         } catch (SQLException ex) {
             Logger.getLogger(DataAccess.class.getName()).log(Level.SEVERE, null, ex);
@@ -215,7 +216,7 @@ public class DataAccess {
      * @param employee
      * @return 
      */
-    public boolean insertEmployes(String sql, Employes employee) {
+    public boolean insertEmployee(String sql, Employee employee) {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, employee.getNom());
@@ -227,6 +228,7 @@ public class DataAccess {
             preparedStatement.setString(7, employee.getCodepostal());
             preparedStatement.setString(8, employee.getVille());
             preparedStatement.setString(9, employee.getEmail());
+            preparedStatement.executeUpdate();
             return true;
         } catch (SQLException ex) {
             Logger.getLogger(DataAccess.class.getName()).log(Level.SEVERE, null, ex);

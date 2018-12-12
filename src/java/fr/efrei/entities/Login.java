@@ -9,7 +9,7 @@ package fr.efrei.entities;
  *
  * @author LUCASMasson
  */
-public class Identifiant {
+public class Login {
     
     private String login="";
     private String pwd="";
@@ -17,7 +17,7 @@ public class Identifiant {
     /**
      * 
      */
-    public Identifiant(){
+    public Login(){
         
     }
     

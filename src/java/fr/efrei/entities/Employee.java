@@ -9,7 +9,7 @@ package fr.efrei.entities;
  *
  * @author LUCASMasson
  */
-public class Employes {
+public class Employee {
     private int id;
     private String nom;
     private String prenom;
@@ -184,7 +184,7 @@ public class Employes {
     /**
      * 
      */
-    public Employes(){
+    public Employee(){
         
     }
 }
