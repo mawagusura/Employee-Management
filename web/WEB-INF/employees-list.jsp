@@ -6,14 +6,20 @@
     <head>
         <!-- title -->
         <title>Liste des employés</title>
-        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
         <link href="${pageContext.request.contextPath}/resources/styles.css" rel="stylesheet" type="text/css"/>
         <meta charset="utf-8">
     </head>
     <body>
-        <form action="${pageContext.request.contextPath}" method="post" class="employees-form">
-            <legend class="mt-2"><b>Liste des employés</b></legend>
-            
+        <c:import url="/WEB-INF/navbar.jsp"/>
+        
+        
+        
+        <form action="${pageContext.request.contextPath}" method="post" class="employees-form">   
+            <legend class="mt-4">Liste des employés</legend>
             <p class="text-danger"><c:out value="${message_error}"/><p>
             <c:remove var="message_error" scope="session"/>
             
@@ -65,7 +71,6 @@
             </c:choose>
             
             <button type="submit" name="action" value="add" class="btn ml-1">Ajouter</button>
-            <button type="submit" name="action" value="logout" class="btn ml-1  btn-danger float-right">Déconnexion</button>
         </form>
     </body>
 </html>

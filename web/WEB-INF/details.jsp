@@ -6,11 +6,15 @@
     <head>
         <!-- title -->
         <title>Details</title>
-        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
         <link href="${pageContext.request.contextPath}/resources/styles.css" rel="stylesheet" type="text/css"/>
         <meta charset="utf-8">
     </head>
     <body>
+        <c:import url="/WEB-INF/navbar.jsp"/>
         <div class="d-block mx-auto details-form jumbotron">
             <form action="${pageContext.request.contextPath}" method="post">
                 
