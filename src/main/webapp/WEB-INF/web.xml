@@ -13,10 +13,17 @@
         <servlet-class>fr.efrei.Controllers.LoginController</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>CRUDController</servlet-name>
-        <servlet-class>fr.efrei.Controllers.CRUDController</servlet-class>
+        <servlet-name>DetailsController</servlet-name>
+        <servlet-class>fr.efrei.Controllers.DetailsController</servlet-class>
     </servlet>
-
+    <servlet>
+        <servlet-name>AddController</servlet-name>
+        <servlet-class>fr.efrei.Controllers.AddController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DeleteController</servlet-name>
+        <servlet-class>fr.efrei.Controllers.DeleteController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>DefautController</servlet-name>
         <url-pattern>/</url-pattern>
@@ -30,8 +37,16 @@
         <url-pattern>/list</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>CRUDController</servlet-name>
-        <url-pattern>/crud</url-pattern>
+        <servlet-name>DetailsController</servlet-name>
+        <url-pattern>/details</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AddController</servlet-name>
+        <url-pattern>/add</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DeleteController</servlet-name>
+        <url-pattern>/delete</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

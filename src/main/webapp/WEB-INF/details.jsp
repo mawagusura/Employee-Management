@@ -9,10 +9,10 @@
     </head>
     <body>
         <div class="d-block mx-auto details-form">
-            <form action="${pageContext.request.contextPath}/crud" method="put">
+            <form action="${pageContext.request.contextPath}/details" method="post">
                 <input type="hidden" class="form-control" id="employes-id" name="employes-id" value="${employe.id}">
                 
-                <legend>Détails du membre ${employe.prenom} ${employe.nom}</legend>
+                <legend>Détails du membre ${requestScope.employe.prenom} ${employe.nom}</legend>
                 <hr>
                 <div class="form-group row">
                     <label for="name" class="col-sm-2 col-form-label">Nom</label>

@@ -11,7 +11,7 @@
         <meta charset="utf-8">
     </head>
     <body>
-        <form action="${pageContext.request.contextPath}/crud" id="form">
+        <form action="${pageContext.request.contextPath}/details" id="form" method="get">
             <legend class="m-2"><b>Liste des employés</b></legend>
             
             <p class="text-danger m-2">${message_erreur}</p>
@@ -40,7 +40,7 @@
                         <tbody>
                             <c:forEach items="${ employes }" var="employe" >
                                 <tr>
-                                    <th scope="row"><input type="radio" name="employes-id" value="${employe.id}" id="employee_${employe.id}"></th>
+                                    <th scope="row"><input type="radio" name="employes-id" value="${employe.id}" id="employes-id"></th>
                                     <td><c:out value="${employe.nom}"/></td>
                                     <td><c:out value="${employe.prenom}"/></td>
                                     <td><c:out value="${employe.teldom}"/></td>
@@ -57,10 +57,10 @@
                 </c:otherwise>
             </c:choose>
             
-            <button type="submit" name="action" value="delete" class="btn btn-primary ml-1" formmethod="delete" >Supprimer</button>
-            <button type="submit" name="action" value="details" class="btn btn-primary ml-1" formmethod="get">Détails</button>
+            <button type="submit" class="btn btn-primary ml-1" formaction="${pageContext.request.contextPath}/delete" formmethod="get">Supprimer</button>
+            <button type="submit" class="btn btn-primary ml-1" >Détails</button>
             
-            <button type="submit" name="action" value="add" class="btn ml-1" formmethod="get" >Ajouter</button>
+            <button type="submit" class="btn ml-1" formaction="${pageContext.request.contextPath}/add" formmethod="get" >Ajouter</button>
         </form>
     </body>
 </html>

@@ -9,7 +9,7 @@
     </head>
     <body>
         <div class="d-block mx-auto details-form">
-            <form action="${pageContext.request.contextPath}/crud" method="post">                
+            <form action="${pageContext.request.contextPath}/add" method="post">                
                 <legend>Nouvel utilisateur</legend>
                 <hr>
                 <div class="form-group row">
@@ -33,13 +33,13 @@
                 <div class="form-group row">
                     <label for="mobile-phone" class="col-sm-2 col-form-label">Tél mob</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" id="mobile-phone" name="employes-telperso" placeholder="Tél. mobile">
+                        <input type="text" class="form-control" id="mobile-phone" name="employes-telport" placeholder="Tél. mobile">
                     </div>
                 </div>
                 <div class="form-group row">
                     <label for="pro-phone" class="col-sm-2 col-form-label">Tél pro</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" id="pro-phone" name="employes-telport" placeholder="Tél. professionnel">
+                        <input type="text" class="form-control" id="pro-phone" name="employes-telpro" placeholder="Tél. professionnel">
                     </div>
                 </div>
 

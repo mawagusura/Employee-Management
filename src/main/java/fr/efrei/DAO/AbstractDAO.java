@@ -62,7 +62,8 @@ public abstract class AbstractDAO<T> {
     * @param entity 
     */
    public void delete( T entity ){
-      em.remove( entity );
+       T e = em.merge(entity);
+      em.remove( e );
    }
    
    /**
