@@ -8,8 +8,6 @@ package fr.efrei.Controllers;
 import fr.efrei.DAO.IdentifiantDAO;
 import fr.efrei.entities.Identifiant;
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.Properties;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -38,9 +36,7 @@ public class LoginController extends HttpServlet {
 
     private static final String MESSAGE_LOGIN_ERROR="Echec de la connexion! Vérifiez votre login et/ou mot de passe et essayez à nouveau";
     private static final String MESSAGE_LOGIN_ERROR_EMPTY="Vous devez renseigner les deux champs";
-    
-    private static final String PROPERTIES_SQL_IDENTIFIANT="SQL_IDENTIFIANT";
-    
+        
     
     @EJB(name=EJB_IDENTIFIANT)
     IdentifiantDAO identifiantDAO;

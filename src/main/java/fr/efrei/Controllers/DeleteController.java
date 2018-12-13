@@ -38,6 +38,11 @@ public class DeleteController extends HttpServlet {
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
+     * 
+     * Check if the user is logged in, else redirect to login page.
+     * Delete the user passed in parameters
+     * 
+     * On error redirects to list employee page
      *
      * @param request servlet request
      * @param response servlet response

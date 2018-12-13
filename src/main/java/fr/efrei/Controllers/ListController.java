@@ -31,6 +31,9 @@ public class ListController extends HttpServlet {
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
+     * 
+     * Check if the user is logged in (else redirect to login page).
+     * Display all employees (employee-list.jsp).
      *
      * @param request servlet request
      * @param response servlet response

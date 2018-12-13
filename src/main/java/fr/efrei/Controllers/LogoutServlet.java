@@ -6,7 +6,6 @@
 package fr.efrei.Controllers;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -26,6 +25,8 @@ public class LogoutServlet extends HttpServlet {
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
+     * 
+     * If the user is logged in, log him out. Else redirect to login page.
      *
      * @param request servlet request
      * @param response servlet response

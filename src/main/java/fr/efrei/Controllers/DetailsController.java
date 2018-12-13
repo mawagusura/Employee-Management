@@ -50,8 +50,10 @@ public class DetailsController extends HttpServlet {
     /**
      * Handles the HTTP <code>GET</code> method.
      *
-     * Redirect to the details page or creation employee page 
-     * base on the parameter action
+     * Check if the user is logged in, else redirect to login page.
+     * Redirect to the details page of the employee passed in http parameters
+     * 
+     * On error redirects to list page
      * 
      * @param request servlet request
      * @param response servlet response
@@ -88,9 +90,10 @@ public class DetailsController extends HttpServlet {
     /**
      * Handles the HTTP <code>POST</code> method.
      *
-     * Based on the parameter action
+     * Check if the user is logged in, else redirect to login page.
+     * Update employee
      * 
-     * Create or update or delete employee
+     * On error redirect to details page with error message
      * 
      * @param request servlet request
      * @param response servlet response

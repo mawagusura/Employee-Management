@@ -8,7 +8,6 @@ package fr.efrei.Controllers;
 import fr.efrei.DAO.EmployesDAO;
 import fr.efrei.entities.Employes;
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
 import javax.servlet.ServletException;
@@ -49,6 +48,10 @@ public class AddController extends HttpServlet {
 
     /**
      * Handles the HTTP <code>GET</code> method.
+     * 
+     *Check if the user is logged in, else redirect to login page.
+     * 
+     * Display details page with blank fields and "Add" button
      *
      * @param request servlet request
      * @param response servlet response
@@ -71,6 +74,11 @@ public class AddController extends HttpServlet {
     /**
      * Handles the HTTP <code>POST</code> method.
      *
+     * Check if the user is logged in, else redirect to login page.
+     * 
+     * Create the user with the form informations
+     * On error display error message
+     * 
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
