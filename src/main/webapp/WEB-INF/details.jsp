@@ -1,3 +1,6 @@
+<%@page contentType="text/html" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -12,8 +15,16 @@
             <form action="${pageContext.request.contextPath}/details" method="post">
                 <input type="hidden" class="form-control" id="employes-id" name="employes-id" value="${employe.id}">
                 
-                <legend>Détails du membre ${requestScope.employe.prenom} ${employe.nom}</legend>
+                <legend>DÃ©tails du membre ${employe.prenom} ${employe.nom}</legend>
                 <hr>
+                
+                <p class="text-danger"><c:out value="${message_error}"/></p>
+                <c:remove var="message_error" scope="session"/>
+                
+                <p class="text-primary"><c:out value="${message_info}"/></p>
+                <c:remove var="message_info" scope="session"/>
+
+                
                 <div class="form-group row">
                     <label for="name" class="col-sm-2 col-form-label">Nom</label>
                     <div class="col-sm-10">
@@ -21,25 +32,25 @@
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label for="first-name" class="col-sm-2 col-form-label">Prénom</label>
+                    <label for="first-name" class="col-sm-2 col-form-label">PrÃ©nom</label>
                     <div class="col-sm-10">
                         <input type="text" class="form-control" id="first-name" name="employes-prenom" value="${employe.prenom}">
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label for="fixed-phone" class="col-sm-2 col-form-label">Tél dom</label>
+                    <label for="fixed-phone" class="col-sm-2 col-form-label">TÃ©l dom</label>
                     <div class="col-sm-10">
                         <input type="text" class="form-control" id="fixed-phone" name="employes-teldom" value="${employe.teldom}">
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label for="mobile-phone" class="col-sm-2 col-form-label">Tél mob</label>
+                    <label for="mobile-phone" class="col-sm-2 col-form-label">TÃ©l mob</label>
                     <div class="col-sm-10">
                         <input type="text" class="form-control" id="mobile-phone" name="employes-telperso"value="${employe.telport}">
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label for="pro-phone" class="col-sm-2 col-form-label">Tél pro</label>
+                    <label for="pro-phone" class="col-sm-2 col-form-label">TÃ©l pro</label>
                     <div class="col-sm-10">
                         <input type="text" class="form-control" id="pro-phone" name="employes-telport" value="${employe.telpro}">
                     </div>

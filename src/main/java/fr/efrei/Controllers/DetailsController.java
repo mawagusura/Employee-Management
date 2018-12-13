@@ -26,14 +26,14 @@ public class DetailsController extends HttpServlet {
     private static final String PARAMETER_EMPLOYES_PRENOM="employes-prenom";
     private static final String PARAMETER_EMPLOYES_EMAIL="employes-email";
     private static final String PARAMETER_EMPLOYES_TELDOM="employes-teldom";
-    private static final String PARAMETER_EMPLOYES_TELPORT="employes-telport";
-    private static final String PARAMETER_EMPLOYES_TELPRO="employes-telpro";
+    private static final String PARAMETER_EMPLOYES_TELPORT="employes-telperso";
+    private static final String PARAMETER_EMPLOYES_TELPRO="employes-telport";
     private static final String PARAMETER_EMPLOYES_ADRESSE="employes-adresse";
     private static final String PARAMETER_EMPLOYES_VILLE="employes-ville";
     private static final String PARAMETER_EMPLOYES_CODEPOSTAL="employes-codepostal";
     private static final String PARAMETER_EMPLOYES_ID="employes-id";
     private static final String PAGE_DETAILS="/WEB-INF/details.jsp";
-    private static final String ATTRIBUT_EMPLOYEE="employee";
+    private static final String ATTRIBUT_EMPLOYEE="employe";
     private static final String URL_LIST="list";
     private static final String ATTRIBUT_MESSAGE_ERROR = "message_error";
     private static final String ATTRIBUT_MESSAGE_INFO = "message_info";
@@ -101,6 +101,7 @@ public class DetailsController extends HttpServlet {
         employee.setCodepostal(request.getParameter(PARAMETER_EMPLOYES_CODEPOSTAL));
         if(this.employesDAO.update(employee)!=null){
             request.setAttribute(ATTRIBUT_MESSAGE_INFO,MESSAGE_UPDATE_INFO);
+            request.setAttribute(ATTRIBUT_EMPLOYEE, employee);
             this.getServletContext().getRequestDispatcher(PAGE_DETAILS).forward(request, response);
         }
         else{
