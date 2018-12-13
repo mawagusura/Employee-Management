@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
+import javax.ejb.EJBException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -115,15 +116,21 @@ public class DetailsController extends HttpServlet {
         employee.setAdresse(request.getParameter(PARAMETER_EMPLOYES_ADRESSE));
         employee.setVille(request.getParameter(PARAMETER_EMPLOYES_VILLE));
         employee.setCodepostal(request.getParameter(PARAMETER_EMPLOYES_CODEPOSTAL));
-        if(this.employesDAO.update(employee)!=null){
+        
+        try {
+            this.employesDAO.update(employee);
             request.setAttribute(ATTRIBUT_MESSAGE_INFO,MESSAGE_UPDATE_INFO);
             request.setAttribute(ATTRIBUT_EMPLOYEE, employee);
             this.getServletContext().getRequestDispatcher(PAGE_DETAILS).forward(request, response);
         }
-        else{
+        catch (EJBException e){
+            Logger.getLogger(DetailsController.class.getName()).log(Level.SEVERE, null, e);
             request.setAttribute(ATTRIBUT_MESSAGE_ERROR,MESSAGE_UPDATE_ERROR);
+            request.setAttribute(ATTRIBUT_EMPLOYEE, employee);
             this.getServletContext().getRequestDispatcher(PAGE_DETAILS).forward(request, response);
         }
+
+
     }
 
     

@@ -103,7 +103,6 @@ public class AddController extends HttpServlet {
         catch (EJBException e){
             request.setAttribute(ATTRIBUT_MESSAGE_ERROR, MESSAGE_ADD_ERROR);
             this.getServletContext().getRequestDispatcher(PAGE_NEW_EMPLOYE).forward(request, response);
-
         }
 
     }
