@@ -322,7 +322,7 @@ public class Controller extends HttpServlet {
         }
         else{
             request.setAttribute(ATTRIBUT_MESSAGE_ERROR,MESSAGE_ADD_ERROR);
-            this.getServletContext().getRequestDispatcher(PAGE_EMPLOYEES_LIST).forward(request, response);
+            this.getServletContext().getRequestDispatcher(PAGE_DETAILS).forward(request, response);
         }
         dataAccess.closeConnection();
     }
@@ -357,7 +357,7 @@ public class Controller extends HttpServlet {
             else{
                 request.setAttribute(ATTRIBUT_MESSAGE_ERROR,MESSAGE_DETAILS_ERROR);
                 request.setAttribute(ATTRIBUT_EMPLOYEES, dataAccess.getEmployees(prop.getProperty(PROPERTIES_SQL_ALL_EMPLOYEES)));
-                this.getServletContext().getRequestDispatcher(PAGE_EMPLOYEES_LIST).forward(request, response);
+                this.getServletContext().getRequestDispatcher(PAGE_DETAILS).forward(request, response);
             }
         }        
         dataAccess.closeConnection();
