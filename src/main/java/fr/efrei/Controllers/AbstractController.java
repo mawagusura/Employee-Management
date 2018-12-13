@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletRequest;
  */
 public abstract class AbstractController extends HttpServlet {
 
-    private static final String PAGE_PROPERTIES = "/WEB-INF/db.properties";
+    private static final String PAGE_PROPERTIES = "/WEB-INF/application.properties";
 
     protected Properties initProperty(HttpServletRequest request) throws IOException{
         Properties prop= new Properties();
