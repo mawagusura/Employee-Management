@@ -24,6 +24,11 @@
         <servlet-name>DeleteController</servlet-name>
         <servlet-class>fr.efrei.Controllers.DeleteController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>DefaultServlet</servlet-name>
+        <servlet-class>org.apache.catalina.servlets.DefaultServlet</servlet-class>
+    </servlet>
+
     <servlet-mapping>
         <servlet-name>DefautController</servlet-name>
         <url-pattern>/</url-pattern>
@@ -48,6 +53,11 @@
         <servlet-name>DeleteController</servlet-name>
         <url-pattern>/delete</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DefaultServlet</servlet-name>
+        <url-pattern>/resources/*</url-pattern>
+    </servlet-mapping>
+
     <session-config>
         <session-timeout>
             30

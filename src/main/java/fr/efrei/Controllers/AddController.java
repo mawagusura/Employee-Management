@@ -10,6 +10,7 @@ import fr.efrei.entities.Employes;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.ejb.EJB;
+import javax.ejb.EJBException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -38,7 +39,9 @@ public class AddController extends HttpServlet {
     private static final String ATTRIBUT_MESSAGE_INFO = "message_info";
     private static final String URL_LIST="list";
     private static final String MESSAGE_ADD_INFO="Succès de l'ajout";
-    private static final String PAGE_NEW_EMPLOYE="/WEB-INF/new-employee.jsp";    
+    private static final String MESSAGE_ADD_ERROR="Echec de l'ajout";
+
+    private static final String PAGE_NEW_EMPLOYE="/WEB-INF/details.jsp";    
 
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -51,6 +54,7 @@ public class AddController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        request.setAttribute("new_employee", true);
         this.getServletContext().getRequestDispatcher(PAGE_NEW_EMPLOYE).forward(request, response);
     }
 
@@ -76,9 +80,18 @@ public class AddController extends HttpServlet {
         employee.setVille(request.getParameter(PARAMETER_EMPLOYES_VILLE));
         employee.setCodepostal(request.getParameter(PARAMETER_EMPLOYES_CODEPOSTAL));
 
-        request.setAttribute(ATTRIBUT_MESSAGE_INFO,MESSAGE_ADD_INFO);
-        this.employesDAO.create(employee);
-        response.sendRedirect(URL_LIST);    }
+        try{
+            this.employesDAO.create(employee);
+            request.getSession().setAttribute(ATTRIBUT_MESSAGE_INFO,MESSAGE_ADD_INFO);
+            response.sendRedirect(URL_LIST);
+        }
+        catch (EJBException e){
+            request.setAttribute(ATTRIBUT_MESSAGE_ERROR, MESSAGE_ADD_ERROR);
+            this.getServletContext().getRequestDispatcher(PAGE_NEW_EMPLOYE).forward(request, response);
+
+        }
+
+    }
 
     /**
      * Returns a short description of the servlet.
@@ -87,7 +100,7 @@ public class AddController extends HttpServlet {
      */
     @Override
     public String getServletInfo() {
-        return "Short description";
+        return "Display new employee page on get request and create a new employee on post request.";
     }
 
 }

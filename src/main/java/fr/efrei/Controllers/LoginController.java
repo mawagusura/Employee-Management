@@ -115,7 +115,7 @@ public class LoginController extends HttpServlet {
      */
     @Override
     public String getServletInfo() {
-        return "Login Servlet";
+        return "Login Servlet : return the login page on get and log in the user on post (and set him on session attribute).";
     }
 }
 

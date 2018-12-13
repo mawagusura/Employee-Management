@@ -6,23 +6,32 @@
     <head>
         <!-- title -->
         <title>Liste des employés</title>
-        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-        <link rel="stylesheet" href="styles.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <link href="${pageContext.request.contextPath}/resources/styles.css" rel="stylesheet" type="text/css"/>
         <meta charset="utf-8">
     </head>
     <body>
-        <form action="${pageContext.request.contextPath}/details" id="form" method="get">
-            <legend class="m-2"><b>Liste des employés</b></legend>
+        <c:import url="/WEB-INF/navbar.jsp"/>
+        
+        
+        
+        <form action="${pageContext.request.contextPath}" method="post" class="employees-form">   
+            <legend class="mt-4">Liste des employés</legend>
+            <p class="text-danger"><c:out value="${message_error}"/><p>
+            <c:remove var="message_error" scope="session"/>
             
-            <p class="text-danger m-2">${message_erreur}</p>
-            <p class="text-primary m-2">${message_info}</p>
-            
+            <p class="text-primary"><c:out value="${message_info}"/></p>
+            <c:remove var="message_info" scope="session"/>
+                
             <c:choose>
-                <c:when test="${ employes.size() == 0 }">
+                <c:when test="${ employees.size() == 0 }">
                     <p class="text-danger m-2">Nous devons recruter !</p>
                 </c:when>
                 <c:otherwise>
-                    <table class="table table-striped">
+                    <table class="table table-striped table-bordered">
                         <thead>
                             <tr>
                                 <th scope="col">Sél</th>
@@ -38,29 +47,30 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <c:forEach items="${ employes }" var="employe" >
+                            <!-- Var to ckech by default the first radio button -->
+                            <c:set var = "checked" value = "false"/>
+                            <c:forEach items="${ employees }" var="employee" >
                                 <tr>
-                                    <th scope="row"><input type="radio" name="employes-id" value="${employe.id}" id="employes-id"></th>
-                                    <td><c:out value="${employe.nom}"/></td>
-                                    <td><c:out value="${employe.prenom}"/></td>
-                                    <td><c:out value="${employe.teldom}"/></td>
-                                    <td><c:out value="${employe.telport}"/></td>
-                                    <td><c:out value="${employe.telpro}"/></td>
-                                    <td><c:out value="${employe.adresse}"/></td>
-                                    <td><c:out value="${employe.codepostal}"/></td>
-                                    <td><c:out value="${employe.ville}"/></td>
-                                    <td><c:out value="${employe.email}"/></td>
+                                    <th scope="row"><input type="radio" name="employes-id" value="${employee.id}" id="employee_${employee.id}"></th>
+                                    <td><c:out value="${employee.nom}"/></td>
+                                    <td><c:out value="${employee.prenom}"/></td>
+                                    <td><c:out value="${employee.teldom}"/></td>
+                                    <td><c:out value="${employee.telport}"/></td>
+                                    <td><c:out value="${employee.telpro}"/></td>
+                                    <td><c:out value="${employee.adresse}"/></td>
+                                    <td><c:out value="${employee.codepostal}"/></td>
+                                    <td><c:out value="${employee.ville}"/></td>
+                                    <td><c:out value="${employee.email}"/></td>
                                 </tr>
                             </c:forEach>
                         </tbody>
                     </table>
+                    <button type="submit" class="btn btn-primary ml-1" formaction="${pageContext.request.contextPath}/delete" formmethod="post">Supprimer</button>
+                    <button type="submit" class="btn btn-primary ml-1" formaction="${pageContext.request.contextPath}/details" formmethod="get">Détails</button>
                 </c:otherwise>
             </c:choose>
             
-            <button type="submit" class="btn btn-primary ml-1" formaction="${pageContext.request.contextPath}/delete" formmethod="get">Supprimer</button>
-            <button type="submit" class="btn btn-primary ml-1" >Détails</button>
-            
-            <button type="submit" class="btn ml-1" formaction="${pageContext.request.contextPath}/add" formmethod="get" >Ajouter</button>
+            <button type="submit" class="btn ml-1" formaction="${pageContext.request.contextPath}/add" formmethod="get">Ajouter</button>
         </form>
     </body>
 </html>

@@ -71,7 +71,7 @@ public class DefautController extends HttpServlet {
      */
     @Override
     public String getServletInfo() {
-        return "Short description";
+        return "Default controller that redirects on login";
     }// </editor-fold>
 
 }

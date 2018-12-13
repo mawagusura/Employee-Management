@@ -53,7 +53,7 @@ public class DeleteController extends HttpServlet {
                 Employes e = (Employes) this.employesDAO.findOne(Integer.parseInt(id));
                 if(e!=null){
                     this.employesDAO.delete(e);
-                    request.setAttribute(ATTRIBUT_MESSAGE_INFO,MESSAGE_DELETE_INFO);
+                    request.getSession().setAttribute(ATTRIBUT_MESSAGE_INFO,MESSAGE_DELETE_INFO);
                 }
             }
             catch(NumberFormatException ex){
@@ -99,7 +99,7 @@ public class DeleteController extends HttpServlet {
      */
     @Override
     public String getServletInfo() {
-        return "Short description";
+        return "Delete the employee passed in parameter (both get and post requests).";
     }// </editor-fold>
 
 }

@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class ListController extends HttpServlet {
 
-    private static final String EMPLOYES="employes";
+    private static final String EMPLOYES="employees";
     private static final String PAGE_EMPLOYEES_LIST="/WEB-INF/employees-list.jsp";
     
     @EJB
