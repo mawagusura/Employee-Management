@@ -8,11 +8,11 @@ package fr.efrei.Controllers;
 import fr.efrei.DAO.EmployesDAO;
 import fr.efrei.entities.Employes;
 import java.io.IOException;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -24,16 +24,6 @@ public class DeleteController extends AbstractController {
 
     @EJB
     EmployesDAO employesDAO;
-    
-    private static final String URL_LIST="list";
-    private static final String MESSAGE_DELETE_INFO="La suppression a réussi";
-    private static final String MESSAGE_DELETE_ERROR="Veuillez selectionner l'employé à supprimer !";
-    private static final String PARAMETER_EMPLOYES_ID="employes-id";
-    private static final String ATTRIBUT_MESSAGE_ERROR = "message_error";
-    private static final String ATTRIBUT_MESSAGE_INFO = "message_info";
-    
-    private static final String URL_LOGIN="login";
-    private static final String ATTRIBUT_IDENTIFIANT = "identifiant";
     
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -51,29 +41,29 @@ public class DeleteController extends AbstractController {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
-        if(request.getSession().getAttribute(ATTRIBUT_IDENTIFIANT)==null){
-            response.sendRedirect(URL_LOGIN);
+        Properties prop=this.initProperty(request);
+        if(request.getSession().getAttribute(prop.getProperty("ATTRIBUT_IDENTIFIANT"))==null){
+            response.sendRedirect(prop.getProperty("URL_LOGIN"));
             return;
         }
         
-        String id=request.getParameter(PARAMETER_EMPLOYES_ID);
+        String id=request.getParameter(prop.getProperty("PARAMETER_EMPLOYES_ID"));
         if(id.equals("")){
-            request.setAttribute(ATTRIBUT_MESSAGE_ERROR,MESSAGE_DELETE_ERROR);
+            request.setAttribute(prop.getProperty("ATTRIBUT_MESSAGE_ERROR"),prop.getProperty("MESSAGE_DELETE_ERROR"));
         }
         else{
             try{
                 Employes e = (Employes) this.employesDAO.findOne(Integer.parseInt(id));
                 if(e!=null){
                     this.employesDAO.delete(e);
-                    request.getSession().setAttribute(ATTRIBUT_MESSAGE_INFO,MESSAGE_DELETE_INFO);
+                    request.getSession().setAttribute(prop.getProperty("ATTRIBUT_MESSAGE_INFO"),prop.getProperty("MESSAGE_DELETE_INFO"));
                 }
             }
             catch(NumberFormatException ex){
                 Logger.getLogger(DetailsController.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        response.sendRedirect(URL_LIST);
+        response.sendRedirect(prop.getProperty("URL_LIST"));
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

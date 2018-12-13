@@ -6,8 +6,8 @@
 package fr.efrei.Controllers;
 
 import java.io.IOException;
+import java.util.Properties;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -17,7 +17,6 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class DefautController extends AbstractController {
 
-    private static final String URL_LOGIN="login";
     
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -32,7 +31,8 @@ public class DefautController extends AbstractController {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.sendRedirect(URL_LOGIN);
+        Properties prop=this.initProperty(request);
+        response.sendRedirect(prop.getProperty("URL_LOGIN"));
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
