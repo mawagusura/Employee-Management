@@ -20,7 +20,7 @@ public abstract class AbstractController extends HttpServlet {
 
     private static final String PAGE_PROPERTIES = "/WEB-INF/db.properties";
 
-    private Properties initProperty(HttpServletRequest request) throws IOException{
+    protected Properties initProperty(HttpServletRequest request) throws IOException{
         Properties prop= new Properties();
         InputStream input= request.getServletContext().getResourceAsStream(PAGE_PROPERTIES);
         prop.load(input);

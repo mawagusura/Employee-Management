@@ -6,6 +6,7 @@
 package fr.efrei.Controllers;
 
 import java.io.IOException;
+import java.util.Properties;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -20,7 +21,6 @@ public class LogoutServlet extends AbstractController {
     private static final String PAGE_LOGOUT = "/WEB-INF/logout.jsp";
     private static final String ATTRIBUT_IDENTIFIANT = "identifiant";
     private static final String URL_LOGIN="login";
-
     
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -35,7 +35,7 @@ public class LogoutServlet extends AbstractController {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+        Properties prop= this.initProperty(request);    
         if(request.getSession().getAttribute(ATTRIBUT_IDENTIFIANT)==null){
             response.sendRedirect(URL_LOGIN);
             return;
