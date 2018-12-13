@@ -7,9 +7,9 @@ package fr.efrei.Controllers;
 
 import fr.efrei.DAO.EmployesDAO;
 import java.io.IOException;
+import java.util.Properties;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -18,14 +18,8 @@ import javax.servlet.http.HttpServletResponse;
  * @author Amaury
  */
 public class ListController extends AbstractController {
-
-    private static final String EMPLOYES="employees";
-    private static final String PAGE_EMPLOYEES_LIST="/WEB-INF/employees-list.jsp";
-    private static final String URL_LOGIN="login";
-
-    private static final String ATTRIBUT_IDENTIFIANT = "identifiant";
     
-    @EJB
+    @EJB(name="emloyesDAO")
     EmployesDAO employesDAO;
     
     /**
@@ -42,12 +36,15 @@ public class ListController extends AbstractController {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        if(request.getSession().getAttribute(ATTRIBUT_IDENTIFIANT)==null){
-            response.sendRedirect(URL_LOGIN);
+        
+        Properties prop = this.initProperty(request);
+        
+        if(request.getSession().getAttribute(prop.getProperty("ATTRIBUT_IDENTIFIANT"))==null){
+            response.sendRedirect(prop.getProperty("URL_LOGIN"));
         }
         else{
-            request.setAttribute(EMPLOYES, this.employesDAO.findAll() );
-            this.getServletContext().getRequestDispatcher(PAGE_EMPLOYEES_LIST).forward(request, response);
+            request.setAttribute(prop.getProperty("EMPLOYES"), this.employesDAO.findAll() );
+            this.getServletContext().getRequestDispatcher(prop.getProperty("PAGE_EMPLOYEES_LIST")).forward(request, response);
         }
     }
 

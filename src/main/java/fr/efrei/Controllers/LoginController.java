@@ -8,6 +8,7 @@ package fr.efrei.Controllers;
 import fr.efrei.DAO.IdentifiantDAO;
 import fr.efrei.entities.Identifiant;
 import java.io.IOException;
+import java.util.Properties;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -20,25 +21,8 @@ import javax.servlet.http.HttpSession;
  * @author LUCASMasson
  */
 public class LoginController extends AbstractController {
-
-    private static final String EJB_IDENTIFIANT="identifiantDAO";
-    private static final String IDENTIFIANT="identifiant";
     
-    private static final String ATTRIBUT_MESSAGE_ERROR = "message_error";
-    private static final String ATTRIBUT_IDENTIFIANT = "identifiant";
-    
-    private static final String PARAMETER_CH_LOGIN="chLogin";
-    private static final String PARAMETER_CH_PASSWORD="chPassword";
-    
-    private static final String URL_LIST="list";
-
-    private static final String PAGE_LOGIN="/WEB-INF/login.jsp";
-
-    private static final String MESSAGE_LOGIN_ERROR="Echec de la connexion! Vérifiez votre login et/ou mot de passe et essayez à nouveau";
-    private static final String MESSAGE_LOGIN_ERROR_EMPTY="Vous devez renseigner les deux champs";
-        
-    
-    @EJB(name=EJB_IDENTIFIANT)
+    @EJB(name="identifiantDAO")
     IdentifiantDAO identifiantDAO;
     
     /**
@@ -56,13 +40,15 @@ public class LoginController extends AbstractController {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
+        Properties prop = this.initProperty(request);
+        
         HttpSession session=request.getSession(true);
 
-        if(session.getAttribute(ATTRIBUT_IDENTIFIANT)!=null){
-            response.sendRedirect(URL_LIST);
+        if(session.getAttribute(prop.getProperty("ATTRIBUT_IDENTIFIANT"))!=null){
+            response.sendRedirect(prop.getProperty("URL_LIST"));
         }
         else {
-            this.getServletContext().getRequestDispatcher(PAGE_LOGIN).forward(request, response);
+            this.getServletContext().getRequestDispatcher(prop.getProperty("PAGE_LOGIN")).forward(request, response);
         }
     }
 
@@ -82,23 +68,26 @@ public class LoginController extends AbstractController {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
         HttpSession session=request.getSession(true);
         
-        String login=request.getParameter(PARAMETER_CH_LOGIN);
-        String password=request.getParameter(PARAMETER_CH_PASSWORD);
+        Properties prop = this.initProperty(request);
+        
+        String login=request.getParameter(prop.getProperty("PARAMETER_CH_LOGIN"));
+        String password=request.getParameter(prop.getProperty("PARAMETER_CH_PASSWORD"));
         if(login.equals("")||password.equals("")){
-            request.setAttribute(ATTRIBUT_MESSAGE_ERROR,MESSAGE_LOGIN_ERROR_EMPTY);
-            this.getServletContext().getRequestDispatcher(PAGE_LOGIN).forward(request, response);
+            request.setAttribute(prop.getProperty("ATTRIBUT_MESSAGE_ERROR"),prop.getProperty("MESSAGE_LOGIN_ERROR_EMPTY"));
+            this.getServletContext().getRequestDispatcher(prop.getProperty("PAGE_LOGIN")).forward(request, response);
         }
         else{
             Identifiant id = (Identifiant) this.identifiantDAO.findByLogin(login,password);
 
             if(id!=null){
-                session.setAttribute(IDENTIFIANT, id);
-                response.sendRedirect(URL_LIST);
+                session.setAttribute(prop.getProperty("IDENTIFIANT"), id);
+                response.sendRedirect(prop.getProperty("URL_LIST"));
             }
             else{
-                request.setAttribute(ATTRIBUT_MESSAGE_ERROR, MESSAGE_LOGIN_ERROR);
+                request.setAttribute(prop.getProperty("ATTRIBUT_MESSAGE_ERROR"), prop.getProperty("MESSAGE_LOGIN_ERROR"));
                 doGet(request, response);
             }   
         }

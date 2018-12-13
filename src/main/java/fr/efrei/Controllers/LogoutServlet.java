@@ -8,7 +8,6 @@ package fr.efrei.Controllers;
 import java.io.IOException;
 import java.util.Properties;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -17,10 +16,6 @@ import javax.servlet.http.HttpServletResponse;
  * @author Amaury
  */
 public class LogoutServlet extends AbstractController {
-
-    private static final String PAGE_LOGOUT = "/WEB-INF/logout.jsp";
-    private static final String ATTRIBUT_IDENTIFIANT = "identifiant";
-    private static final String URL_LOGIN="login";
     
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -35,13 +30,14 @@ public class LogoutServlet extends AbstractController {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
         Properties prop= this.initProperty(request);    
-        if(request.getSession().getAttribute(ATTRIBUT_IDENTIFIANT)==null){
-            response.sendRedirect(URL_LOGIN);
+        if(request.getSession().getAttribute(prop.getProperty("ATTRIBUT_IDENTIFIANT"))==null){
+            response.sendRedirect(prop.getProperty("URL_LOGIN"));
             return;
         }
-        request.getSession().removeAttribute(ATTRIBUT_IDENTIFIANT);
-        this.getServletContext().getRequestDispatcher(PAGE_LOGOUT).forward(request, response);
+        request.getSession().removeAttribute(prop.getProperty("ATTRIBUT_IDENTIFIANT"));
+        this.getServletContext().getRequestDispatcher(prop.getProperty("PAGE_LOGOUT")).forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

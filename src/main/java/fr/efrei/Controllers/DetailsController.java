@@ -8,12 +8,12 @@ package fr.efrei.Controllers;
 import fr.efrei.DAO.EmployesDAO;
 import fr.efrei.entities.Employes;
 import java.io.IOException;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -22,29 +22,8 @@ import javax.servlet.http.HttpServletResponse;
  * @author Amaury
  */
 public class DetailsController extends AbstractController {
-    
-    private static final String PARAMETER_EMPLOYES_NOM="employes-nom";
-    private static final String PARAMETER_EMPLOYES_PRENOM="employes-prenom";
-    private static final String PARAMETER_EMPLOYES_EMAIL="employes-email";
-    private static final String PARAMETER_EMPLOYES_TELDOM="employes-teldom";
-    private static final String PARAMETER_EMPLOYES_TELPORT="employes-telport";
-    private static final String PARAMETER_EMPLOYES_TELPRO="employes-telpro";
-    private static final String PARAMETER_EMPLOYES_ADRESSE="employes-adresse";
-    private static final String PARAMETER_EMPLOYES_VILLE="employes-ville";
-    private static final String PARAMETER_EMPLOYES_CODEPOSTAL="employes-codepostal";
-    private static final String PARAMETER_EMPLOYES_ID="employes-id";
-    private static final String PAGE_DETAILS="/WEB-INF/details.jsp";
-    private static final String ATTRIBUT_EMPLOYEE="employee";
-    private static final String URL_LIST="list";
-    private static final String ATTRIBUT_MESSAGE_ERROR = "message_error";
-    private static final String ATTRIBUT_MESSAGE_INFO = "message_info";
-    private static final String MESSAGE_UPDATE_INFO="Succes de la mise à jour";
-    private static final String MESSAGE_UPDATE_ERROR="Erreur dans la mise à jour";  
-    
-    private static final String URL_LOGIN="login";
-    private static final String ATTRIBUT_IDENTIFIANT = "identifiant";
-    
-    @EJB
+        
+    @EJB(name="employesDAO")
     EmployesDAO employesDAO;
     
     /**
@@ -64,27 +43,29 @@ public class DetailsController extends AbstractController {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        if(request.getSession().getAttribute(ATTRIBUT_IDENTIFIANT)==null){
-            response.sendRedirect(URL_LOGIN);
+        Properties prop = this.initProperty(request);
+        
+        if(request.getSession().getAttribute(prop.getProperty("ATTRIBUT_IDENTIFIANT"))==null){
+            response.sendRedirect(prop.getProperty("URL_LOGIN"));
             return;
         }
         
         try{
-            String temp = request.getParameter(PARAMETER_EMPLOYES_ID);
+            String temp = request.getParameter(prop.getProperty("PARAMETER_EMPLOYES_ID"));
             int id =  Integer.parseInt( temp);
             Employes employe = (Employes) this.employesDAO.findOne(id);
             if(employe!=null){
-                request.setAttribute(ATTRIBUT_EMPLOYEE, employe);
-                request.setAttribute("new_employee", false);
-                this.getServletContext().getRequestDispatcher(PAGE_DETAILS).forward(request, response);
+                request.setAttribute(prop.getProperty("ATTRIBUT_EMPLOYEE"), employe);
+                request.setAttribute(prop.getProperty("ATTRIBUT_NEW_EMPLOYEE"), false);
+                this.getServletContext().getRequestDispatcher(prop.getProperty("PAGE_DETAILS")).forward(request, response);
                 return;
             }
         }
         catch(NumberFormatException ex){
             Logger.getLogger(DetailsController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        request.getSession().setAttribute(ATTRIBUT_MESSAGE_INFO,MESSAGE_UPDATE_ERROR);
-        response.sendRedirect(URL_LIST);
+        request.getSession().setAttribute(prop.getProperty("ATTRIBUT_MESSAGE_INFO"),prop.getProperty("MESSAGE_UPDATE_ERROR"));
+        response.sendRedirect(prop.getProperty("URL_LIST"));
     }
 
     /**
@@ -104,38 +85,37 @@ public class DetailsController extends AbstractController {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        if(request.getSession().getAttribute(ATTRIBUT_IDENTIFIANT)==null){
-            response.sendRedirect(URL_LOGIN);
+        Properties prop = this.initProperty(request);
+        
+        if(request.getSession().getAttribute(prop.getProperty("ATTRIBUT_IDENTIFIANT"))==null){
+            response.sendRedirect(prop.getProperty("URL_LOGIN"));
             return;
         }
         Employes employee=new Employes();
-        employee.setId(Integer.parseInt(request.getParameter(PARAMETER_EMPLOYES_ID)));
-        employee.setNom(request.getParameter(PARAMETER_EMPLOYES_NOM));
-        employee.setPrenom(request.getParameter(PARAMETER_EMPLOYES_PRENOM));
-        employee.setEmail(request.getParameter(PARAMETER_EMPLOYES_EMAIL));
-        employee.setTeldom(request.getParameter(PARAMETER_EMPLOYES_TELDOM));
-        employee.setTelport(request.getParameter(PARAMETER_EMPLOYES_TELPORT));
-        employee.setTelpro(request.getParameter(PARAMETER_EMPLOYES_TELPRO));
-        employee.setAdresse(request.getParameter(PARAMETER_EMPLOYES_ADRESSE));
-        employee.setVille(request.getParameter(PARAMETER_EMPLOYES_VILLE));
-        employee.setCodepostal(request.getParameter(PARAMETER_EMPLOYES_CODEPOSTAL));
+        employee.setId(Integer.parseInt(request.getParameter(prop.getProperty("PARAMETER_EMPLOYES_ID"))));
+        employee.setNom(request.getParameter(prop.getProperty("PARAMETER_EMPLOYES_NOM")));
+        employee.setPrenom(request.getParameter(prop.getProperty("PARAMETER_EMPLOYES_PRENOM")));
+        employee.setEmail(request.getParameter(prop.getProperty("PARAMETER_EMPLOYES_EMAIL")));
+        employee.setTeldom(request.getParameter(prop.getProperty("PARAMETER_EMPLOYES_TELDOM")));
+        employee.setTelport(request.getParameter(prop.getProperty("PARAMETER_EMPLOYES_TELPORT")));
+        employee.setTelpro(request.getParameter(prop.getProperty("PARAMETER_EMPLOYES_TELPRO")));
+        employee.setAdresse(request.getParameter(prop.getProperty("PARAMETER_EMPLOYES_ADRESSE")));
+        employee.setVille(request.getParameter(prop.getProperty("PARAMETER_EMPLOYES_VILLE")));
+        employee.setCodepostal(request.getParameter(prop.getProperty("PARAMETER_EMPLOYES_CODEPOSTAL")));
         
         try {
             this.employesDAO.update(employee);
-            request.setAttribute(ATTRIBUT_MESSAGE_INFO,MESSAGE_UPDATE_INFO);
-            request.setAttribute(ATTRIBUT_EMPLOYEE, employee);
-            this.getServletContext().getRequestDispatcher(PAGE_DETAILS).forward(request, response);
+            request.setAttribute(prop.getProperty("ATTRIBUT_MESSAGE_INFO"),prop.getProperty("MESSAGE_UPDATE_INFO"));
+            request.setAttribute(prop.getProperty("ATTRIBUT_EMPLOYEE"), employee);
+            this.getServletContext().getRequestDispatcher(prop.getProperty("PAGE_DETAILS")).forward(request, response);
         }
         catch (EJBException e){
             Logger.getLogger(DetailsController.class.getName()).log(Level.SEVERE, null, e);
-            request.setAttribute(ATTRIBUT_MESSAGE_ERROR,MESSAGE_UPDATE_ERROR);
-            request.setAttribute(ATTRIBUT_EMPLOYEE, employee);
-            this.getServletContext().getRequestDispatcher(PAGE_DETAILS).forward(request, response);
+            request.setAttribute(prop.getProperty("ATTRIBUT_MESSAGE_ERROR"),prop.getProperty("MESSAGE_UPDATE_ERROR"));
+            request.setAttribute(prop.getProperty("ATTRIBUT_EMPLOYEE"), employee);
+            this.getServletContext().getRequestDispatcher(prop.getProperty("PAGE_DETAILS")).forward(request, response);
         }
-
-
     }
-
     
     /**
      * Returns a short description of the servlet.
