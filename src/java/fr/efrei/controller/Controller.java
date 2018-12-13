@@ -322,7 +322,7 @@ public class Controller extends HttpServlet {
         }
         else{
             request.setAttribute(ATTRIBUT_MESSAGE_ERROR,MESSAGE_ADD_ERROR);
-            this.getServletContext().getRequestDispatcher(PAGE_DETAILS).forward(request, response);
+            this.getServletContext().getRequestDispatcher(PAGE_EMPLOYEES_LIST).forward(request, response);
         }
         dataAccess.closeConnection();
     }

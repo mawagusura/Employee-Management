@@ -85,7 +85,7 @@ public class DataAccess {
                     listEmployes.add(employes);
                 }
             }
-        } catch (SQLException ex) {
+        } catch (SQLException | NullPointerException ex) {
             Logger.getLogger(DataAccess.class.getName()).log(Level.SEVERE, null, ex);
             return null;
         }
@@ -113,7 +113,7 @@ public class DataAccess {
                     id.setPwd(rs.getString(IDENTIFIANT_PASSWORD));
                 }
             }
-        } catch (SQLException ex) {
+        } catch (SQLException | NullPointerException ex) {
             Logger.getLogger(DataAccess.class.getName()).log(Level.SEVERE, null, ex);
         }
         return id;
@@ -144,7 +144,7 @@ public class DataAccess {
             preparedStatement.setString(1, id);
             preparedStatement.execute();
             return true;
-        } catch (SQLException ex) {
+        } catch (SQLException | NullPointerException ex) {
             Logger.getLogger(DataAccess.class.getName()).log(Level.SEVERE, null, ex);
             return false;
         }
@@ -177,7 +177,7 @@ public class DataAccess {
             }
             
             return employes;
-        } catch (SQLException ex) {
+        } catch (SQLException | NullPointerException ex ) {
             Logger.getLogger(DataAccess.class.getName()).log(Level.SEVERE, null, ex);
             return null;
         }
@@ -204,7 +204,7 @@ public class DataAccess {
             preparedStatement.setInt(10, employee.getId());
             preparedStatement.executeUpdate();
             return true;
-        } catch (SQLException ex) {
+        } catch (SQLException | NullPointerException ex) {
             Logger.getLogger(DataAccess.class.getName()).log(Level.SEVERE, null, ex);
             return false;
         }
@@ -230,7 +230,7 @@ public class DataAccess {
             preparedStatement.setString(9, employee.getEmail());
             preparedStatement.executeUpdate();
             return true;
-        } catch (SQLException ex) {
+        } catch (SQLException | NullPointerException ex) {
             Logger.getLogger(DataAccess.class.getName()).log(Level.SEVERE, null, ex);
             return false;
         }
