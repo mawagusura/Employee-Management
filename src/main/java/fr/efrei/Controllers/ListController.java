@@ -21,6 +21,9 @@ public class ListController extends HttpServlet {
 
     private static final String EMPLOYES="employees";
     private static final String PAGE_EMPLOYEES_LIST="/WEB-INF/employees-list.jsp";
+    private static final String URL_LOGIN="login";
+
+    private static final String ATTRIBUT_IDENTIFIANT = "identifiant";
     
     @EJB
     EmployesDAO employesDAO;
@@ -36,9 +39,13 @@ public class ListController extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        request.setAttribute(EMPLOYES, this.employesDAO.findAll() );
-        this.getServletContext().getRequestDispatcher(PAGE_EMPLOYEES_LIST).forward(request, response);
+        if(request.getSession().getAttribute(ATTRIBUT_IDENTIFIANT)==null){
+            response.sendRedirect(URL_LOGIN);
+        }
+        else{
+            request.setAttribute(EMPLOYES, this.employesDAO.findAll() );
+            this.getServletContext().getRequestDispatcher(PAGE_EMPLOYEES_LIST).forward(request, response);
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

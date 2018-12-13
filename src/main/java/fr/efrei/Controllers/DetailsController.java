@@ -40,6 +40,9 @@ public class DetailsController extends HttpServlet {
     private static final String MESSAGE_UPDATE_INFO="Succes de la mise à jour";
     private static final String MESSAGE_UPDATE_ERROR="Erreur dans la mise à jour";  
     
+    private static final String URL_LOGIN="login";
+    private static final String ATTRIBUT_IDENTIFIANT = "identifiant";
+    
     @EJB
     EmployesDAO employesDAO;
     
@@ -57,6 +60,12 @@ public class DetailsController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
+        if(request.getSession().getAttribute(ATTRIBUT_IDENTIFIANT)==null){
+            response.sendRedirect(URL_LOGIN);
+            return;
+        }
+        
         try{
             String temp = request.getParameter(PARAMETER_EMPLOYES_ID);
             int id =  Integer.parseInt( temp);
@@ -90,6 +99,11 @@ public class DetailsController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
+        if(request.getSession().getAttribute(ATTRIBUT_IDENTIFIANT)==null){
+            response.sendRedirect(URL_LOGIN);
+            return;
+        }
         Employes employee=new Employes();
         employee.setId(Integer.parseInt(request.getParameter(PARAMETER_EMPLOYES_ID)));
         employee.setNom(request.getParameter(PARAMETER_EMPLOYES_NOM));

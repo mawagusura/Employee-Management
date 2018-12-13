@@ -41,7 +41,11 @@ public class AddController extends HttpServlet {
     private static final String MESSAGE_ADD_INFO="Succès de l'ajout";
     private static final String MESSAGE_ADD_ERROR="Echec de l'ajout";
 
-    private static final String PAGE_NEW_EMPLOYE="/WEB-INF/details.jsp";    
+    private static final String PAGE_NEW_EMPLOYE="/WEB-INF/details.jsp";  
+    
+    private static final String URL_LOGIN="login";
+
+    private static final String ATTRIBUT_IDENTIFIANT = "identifiant";
 
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -54,6 +58,12 @@ public class AddController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
+        if(request.getSession().getAttribute(ATTRIBUT_IDENTIFIANT)==null){
+            response.sendRedirect(URL_LOGIN);
+            return;
+        }
+        
         request.setAttribute("new_employee", true);
         this.getServletContext().getRequestDispatcher(PAGE_NEW_EMPLOYE).forward(request, response);
     }
@@ -69,6 +79,11 @@ public class AddController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
+        if(request.getSession().getAttribute(ATTRIBUT_IDENTIFIANT)==null){
+            response.sendRedirect(URL_LOGIN);
+            return;
+        }
         Employes employee=new Employes();
         employee.setNom(request.getParameter(PARAMETER_EMPLOYES_NOM));
         employee.setPrenom(request.getParameter(PARAMETER_EMPLOYES_PRENOM));

@@ -28,7 +28,10 @@
         <servlet-name>DefaultServlet</servlet-name>
         <servlet-class>org.apache.catalina.servlets.DefaultServlet</servlet-class>
     </servlet>
-
+    <servlet>
+        <servlet-name>LogoutServlet</servlet-name>
+        <servlet-class>fr.efrei.Controllers.LogoutServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>DefautController</servlet-name>
         <url-pattern>/</url-pattern>
@@ -57,7 +60,10 @@
         <servlet-name>DefaultServlet</servlet-name>
         <url-pattern>/resources/*</url-pattern>
     </servlet-mapping>
-
+    <servlet-mapping>
+        <servlet-name>LogoutServlet</servlet-name>
+        <url-pattern>/logout</url-pattern>
+    </servlet-mapping>
     <session-config>
         <session-timeout>
             30

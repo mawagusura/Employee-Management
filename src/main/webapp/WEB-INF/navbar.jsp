@@ -7,8 +7,8 @@
         Vous êtes connecté en tant que <b><c:out value="${identifiant.login}"/></b>
     </span>
     <span class="navbar-text ml-2">
-        <form action="${pageContext.request.contextPath}" method="post">
-            <button type="submit" name="action" value="logout" class="btn m1-1" > <i class="fa fa-power-off"></i> </button>
+        <form action="${pageContext.request.contextPath}/logout" method="post">
+            <button type="submit"  class="btn m1-1" > <i class="fa fa-power-off"></i> </button>
         </form>
     </span>
 </nav> 

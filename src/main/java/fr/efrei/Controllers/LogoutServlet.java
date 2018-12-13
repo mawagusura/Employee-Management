@@ -5,12 +5,8 @@
  */
 package fr.efrei.Controllers;
 
-import fr.efrei.DAO.EmployesDAO;
-import fr.efrei.entities.Employes;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.ejb.EJB;
+import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -20,20 +16,12 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Amaury
  */
-public class DeleteController extends HttpServlet {
+public class LogoutServlet extends HttpServlet {
 
-    @EJB
-    EmployesDAO employesDAO;
-    
-    private static final String URL_LIST="list";
-    private static final String MESSAGE_DELETE_INFO="La suppression a réussi";
-    private static final String MESSAGE_DELETE_ERROR="Veuillez selectionner l'employé à supprimer !";
-    private static final String PARAMETER_EMPLOYES_ID="employes-id";
-    private static final String ATTRIBUT_MESSAGE_ERROR = "message_error";
-    private static final String ATTRIBUT_MESSAGE_INFO = "message_info";
-    
-    private static final String URL_LOGIN="login";
+    private static final String PAGE_LOGOUT = "/WEB-INF/logout.jsp";
     private static final String ATTRIBUT_IDENTIFIANT = "identifiant";
+    private static final String URL_LOGIN="login";
+
     
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -46,29 +34,13 @@ public class DeleteController extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+        
         if(request.getSession().getAttribute(ATTRIBUT_IDENTIFIANT)==null){
             response.sendRedirect(URL_LOGIN);
             return;
         }
-        
-        String id=request.getParameter(PARAMETER_EMPLOYES_ID);
-        if(id.equals("")){
-            request.setAttribute(ATTRIBUT_MESSAGE_ERROR,MESSAGE_DELETE_ERROR);
-        }
-        else{
-            try{
-                Employes e = (Employes) this.employesDAO.findOne(Integer.parseInt(id));
-                if(e!=null){
-                    this.employesDAO.delete(e);
-                    request.getSession().setAttribute(ATTRIBUT_MESSAGE_INFO,MESSAGE_DELETE_INFO);
-                }
-            }
-            catch(NumberFormatException ex){
-                Logger.getLogger(DetailsController.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        response.sendRedirect(URL_LIST);
+        request.getSession().removeAttribute(ATTRIBUT_IDENTIFIANT);
+        this.getServletContext().getRequestDispatcher(PAGE_LOGOUT).forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -107,7 +79,7 @@ public class DeleteController extends HttpServlet {
      */
     @Override
     public String getServletInfo() {
-        return "Delete the employee passed in parameter (both get and post requests).";
+        return "Log out the user and display logout page.";
     }// </editor-fold>
 
 }
