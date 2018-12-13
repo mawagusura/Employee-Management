@@ -48,8 +48,8 @@ public class DeleteController extends AbstractController {
         }
         
         String id=request.getParameter(prop.getProperty("PARAMETER_EMPLOYES_ID"));
-        if(id.equals("")){
-            request.setAttribute(prop.getProperty("ATTRIBUT_MESSAGE_ERROR"),prop.getProperty("MESSAGE_DELETE_ERROR"));
+        if(id==null){
+            request.getSession().setAttribute(prop.getProperty("ATTRIBUT_MESSAGE_ERROR"),prop.getProperty("MESSAGE_DELETE_ERROR"));
         }
         else{
             try{

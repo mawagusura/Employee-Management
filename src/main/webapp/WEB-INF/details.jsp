@@ -180,7 +180,7 @@
                         </c:otherwise>
                     </c:choose>
                    
-                    <button class="btn ml-1" formaction="${pageContext.request.contextPath}/list" formmethod="get">Voir liste</button>
+                    <a href ="${pageContext.request.contextPath}/list" class="btn ml-1"> Voir liste </a>
                 </div>
             </form>
         </div>

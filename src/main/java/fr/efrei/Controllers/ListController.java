@@ -43,7 +43,7 @@ public class ListController extends AbstractController {
             response.sendRedirect(prop.getProperty("URL_LOGIN"));
         }
         else{
-            request.setAttribute(prop.getProperty("EMPLOYES"), this.employesDAO.findAll() );
+            request.setAttribute(prop.getProperty("ATTRIBUT_EMPLOYEES"), this.employesDAO.findAll() );
             this.getServletContext().getRequestDispatcher(prop.getProperty("PAGE_EMPLOYEES_LIST")).forward(request, response);
         }
     }

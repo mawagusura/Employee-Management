@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.util.Properties;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -83,7 +82,7 @@ public class LoginController extends AbstractController {
             Identifiant id = (Identifiant) this.identifiantDAO.findByLogin(login,password);
 
             if(id!=null){
-                session.setAttribute(prop.getProperty("IDENTIFIANT"), id);
+                session.setAttribute(prop.getProperty("ATTRIBUT_IDENTIFIANT"), id);
                 response.sendRedirect(prop.getProperty("URL_LIST"));
             }
             else{

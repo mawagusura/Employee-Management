@@ -64,7 +64,7 @@ public class DetailsController extends AbstractController {
         catch(NumberFormatException ex){
             Logger.getLogger(DetailsController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        request.getSession().setAttribute(prop.getProperty("ATTRIBUT_MESSAGE_INFO"),prop.getProperty("MESSAGE_UPDATE_ERROR"));
+        request.getSession().setAttribute(prop.getProperty("ATTRIBUT_MESSAGE_ERROR"),prop.getProperty("MESSAGE_DETAILS_ERROR_SELECTION"));
         response.sendRedirect(prop.getProperty("URL_LIST"));
     }
 
