@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Amaury
  */
-public class ListController extends HttpServlet {
+public class ListController extends AbstractController {
 
     private static final String EMPLOYES="employees";
     private static final String PAGE_EMPLOYEES_LIST="/WEB-INF/employees-list.jsp";

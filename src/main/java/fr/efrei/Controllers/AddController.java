@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Amaury
  */
-public class AddController extends HttpServlet {
+public class AddController extends AbstractController {
 
     @EJB
     EmployesDAO employesDAO;

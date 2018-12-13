@@ -21,7 +21,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Amaury
  */
-public class DetailsController extends HttpServlet {
+public class DetailsController extends AbstractController {
     
     private static final String PARAMETER_EMPLOYES_NOM="employes-nom";
     private static final String PARAMETER_EMPLOYES_PRENOM="employes-prenom";

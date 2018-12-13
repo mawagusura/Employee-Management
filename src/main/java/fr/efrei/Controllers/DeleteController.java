@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Amaury
  */
-public class DeleteController extends HttpServlet {
+public class DeleteController extends AbstractController {
 
     @EJB
     EmployesDAO employesDAO;

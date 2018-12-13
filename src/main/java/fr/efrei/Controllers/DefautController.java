@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Amaury
  */
-public class DefautController extends HttpServlet {
+public class DefautController extends AbstractController {
 
     private static final String URL_LOGIN="login";
     

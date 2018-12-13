@@ -19,7 +19,7 @@ import javax.servlet.http.HttpSession;
  *
  * @author LUCASMasson
  */
-public class LoginController extends HttpServlet {
+public class LoginController extends AbstractController {
 
     private static final String EJB_IDENTIFIANT="identifiantDAO";
     private static final String IDENTIFIANT="identifiant";

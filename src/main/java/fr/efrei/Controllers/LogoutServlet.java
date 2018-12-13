@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Amaury
  */
-public class LogoutServlet extends HttpServlet {
+public class LogoutServlet extends AbstractController {
 
     private static final String PAGE_LOGOUT = "/WEB-INF/logout.jsp";
     private static final String ATTRIBUT_IDENTIFIANT = "identifiant";
