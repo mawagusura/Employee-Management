@@ -16,6 +16,7 @@
     <body>
         <c:import url="/WEB-INF/navbar.jsp"/>
         <div class="d-block mx-auto details-form jumbotron">
+            <a href="navbar.jsp"></a>
             <form action="${pageContext.request.contextPath}" method="post">
                 
                 <c:choose>
@@ -172,14 +173,14 @@
                 <div class="float-right">
                     <c:choose>
                         <c:when test="${new_employee}">
-                            <button type="submit" name="action" value="add" class="btn btn-primary ml-1">Ajouter ce membre</button>
+                            <button type="submit" name="action" value="add" class="btn btn-primary ml-1">Valider</button>
                         </c:when>
                         <c:otherwise>
                             <button type="submit" name="action" value="update" class="btn btn-primary ml-1">Modifier</button>
                         </c:otherwise>
                     </c:choose>
                    
-                    <a href="${pageContext.request.contextPath}"><button class="btn ml-1">Retour</button></a>
+                    <a href="${pageContext.request.contextPath}"><button class="btn ml-1">Voir liste</button></a>
                 </div>
             </form>
         </div>
